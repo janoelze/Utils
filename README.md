@@ -1,219 +1,206 @@
-# SQ - A Small & Quick SQLite-Only ORM
+# Utils
 
-SQ is a lightweight ORM inspired by RedBeanPHP, designed for rapid prototyping and mini PHP applications using SQLite.
+`Utils` is a collection of – somewhat naive – utility classes for PHP applications, including `SQ`, a simple SQLite ORM, and `RT`, a basic routing system.
 
-## Features
+## Includes
 
-- Simple and intuitive API
-- Dynamic table and column creation
-- Automatic handling of `created_at`, `updated_at`, and `uuid` fields
-- Basic query builder
-- Transaction support
+- [SQ](#sq-class): A simple SQLite ORM
+- [RT](#rt-class): A basic routing system
 
 ## Installation
 
-Include the `SQ.php` file in your project and instantiate the `SQ` class with the path to your SQLite database file.
+You can install the package via composer:
+
+```bash
+composer require janoelze/utils
+```
 
 ## Usage
 
-### SQ Class
-
-#### Creating a new record
+### SQ Usage Example
 
 ```php
-$sq = new SQ('path/to/database.sqlite');
+<?php
+use JanOelze\Utils\SQ;
+
+// Initialize the ORM with the SQLite database path
+$sq = new SQ('database.sqlite');
 
 // Create a new user
 $user = $sq->dispense('user');
 $user->name = 'John Doe';
-$user->email = 'john@example.com';
+$user->email = 'john.doe@example.com';
 $user->save();
 
-// Automatically assigned fields:
-// - uuid: A unique identifier
-// - created_at: Timestamp of creation
-// - updated_at: Timestamp of creation (same as created_at initially)
-```
-
-### Finding records
-
-```php
-// Find all users with the name 'John Doe'
+// Retrieve users with the name 'John Doe'
 $users = $sq->find('user', ['name' => 'John Doe']);
 foreach ($users as $user) {
-    echo "Found user: {$user->name}, {$user->email}, UUID: {$user->uuid}\n";
+    echo "User ID: {$user->id}, Name: {$user->name}, Email: {$user->email}\n";
 }
 
-// Find a single user by criteria
-$user = $sq->findOne('user', ['email' => 'john@example.com']);
+// Update a user's email
+$user = $sq->findOne('user', ['id' => 1]);
 if ($user) {
-    echo "Found user: {$user->name}, {$user->email}, UUID: {$user->uuid}\n";
-}
-```
-
-### Using the query builder
-
-```php
-// Using the query builder to find posts
-$posts = $sq->query('post')
-    ->where('user_id', '=', $user->id)
-    ->orderBy('id', 'DESC')
-    ->limit(10)
-    ->get();
-foreach ($posts as $post) {
-    echo "Post: {$post->title} => {$post->content}, UUID: {$post->uuid}\n";
-}
-```
-
-### Transactions
-
-```php
-$sq->beginTransaction();
-try {
-    // Perform multiple operations
-    $user = $sq->dispense('user');
-    $user->name = 'Jane Doe';
-    $user->email = 'jane@example.com';
+    $user->email = 'new.email@example.com';
     $user->save();
-
-    $post = $sq->dispense('post');
-    $post->title = 'Hello World';
-    $post->user_id = $user->id;
-    $post->save();
-
-    $sq->commit();
-} catch (\Exception $e) {
-    $sq->rollBack();
-    throw $e;
 }
+
+// Delete a user
+$user = $sq->findOne('user', ['id' => 1]);
+if ($user) {
+    $user->delete();
+}
+?>
 ```
 
-### RT Class
-
-#### Creating a new RT instance
+### RT Usage Example
 
 ```php
+<?php
 use JanOelze\Utils\RT;
 
-$config = ['default_view' => 'home'];
-$rt = new RT($config);
-```
+// Initialize the routing system with default configuration
+$rt = new RT(['default_view' => 'home']);
 
-#### Adding Middleware
-
-```php
+// Add middleware for authentication
 $rt->addMiddleware(function($request, $response, $next) {
-    // Middleware logic
-    // Example: Logging
-    error_log('Request received for view: ' . $request->getQuery('view'));
+    // Authentication logic here
+    // ...
     return $next($request, $response);
 });
-```
 
-#### Adding a View
-
-```php
-$rt->addView('GET', 'home', function($request, $response) {
-    return [
-        'title' => 'Home Page',
-        'message' => 'Welcome to the Home Page!'
-    ];
+// Define a GET route for the home view
+$rt->addView('GET', 'home', function() {
+    return ['title' => 'Home', 'description' => 'Welcome to the homepage.'];
 });
-```
 
-#### Running the RT Application
+// Define a POST route for submitting a form
+$rt->addView('POST', 'submit', function($request, $response) {
+    $data = $request->getBody();
+    // Process form data
+    // ...
+    return ['status' => 'Form submitted successfully.'];
+});
 
-```php
-$data = $rt->run();
+// Generate a URL for the home view with parameters
+$url = $rt->getUrl('home', ['ref' => 'newsletter']);
+echo "Home URL: {$url}\n";
 
-if ($data['is_json'] ?? false) {
+// Run the routing system
+$response = $rt->run();
+if ($response['is_json'] ?? false) {
     header('Content-Type: application/json');
-    echo json_encode($data);
+    echo json_encode($response);
 } else {
-    // Render HTML view with $data
+    echo "Title: {$response['title']}\nDescription: {$response['description']}\n";
 }
+?>
 ```
-
-#### Generating Full URLs for Views
-
-```php
-// Example usage of getUrl method
-$fullUrl = $rt->getUrl('home', ['user' => '123']);
-echo "Full URL to home view: {$fullUrl}";
-```
-
-## Interface Documentation
 
 ### SQ Class
 
-- **__construct(string $path)**
-  - Initializes the ORM with the specified SQLite database file.
+- **`dispense(string $type): SQBean`**  
+  Create a new bean of the given type.
   
-- **dispense(string $type): SQBean**
-  - Creates a new bean of the specified type.
+  **Usage:**
+  ```php
+  $user = $sq->dispense('user');
+  $user->name = 'Jane Doe';
+  $user->save();
+  ```
+
+- **`find(string $type, array $criteria = []): array`**  
+  Find beans based on criteria.
   
-- **find(string $type, array $criteria = []): array**
-  - Retrieves records matching the criteria.
+  **Usage:**
+  ```php
+  $users = $sq->find('user', ['name' => 'Jane Doe']);
+  ```
+
+- **`findOne(string $type, array $criteria = []): ?SQBean`**  
+  Find a single bean.
   
-- **findOne(string $type, array $criteria = []): ?SQBean**
-  - Retrieves a single record matching the criteria.
+  **Usage:**
+  ```php
+  $user = $sq->findOne('user', ['id' => 1]);
+  ```
+
+- **`execute(string $sql, array $params = []): array`**  
+  Execute a custom SQL query.
   
-- **execute(string $sql, array $params = []): array**
-  - Executes a raw SQL query.
+  **Usage:**
+  ```php
+  $results = $sq->execute('SELECT * FROM user WHERE email = ?', ['jane.doe@example.com']);
+  ```
+
+- **`query(string $table): SQQueryBuilder`**  
+  Start a query builder for the table.
   
-- **query(string $table): SQQueryBuilder**
-  - Returns a query builder for the specified table.
-  
-- **beginTransaction()**
-  - Begins a database transaction.
-  
-- **commit()**
-  - Commits the current transaction.
-  
-- **rollBack()**
-  - Rolls back the current transaction.
-  
-- **getPDO(): PDO**
-  - Returns the underlying PDO instance.
+  **Usage:**
+  ```php
+  $products = $sq->query('product')
+                ->where('price', '>', 100)
+                ->orderBy('name')
+                ->limit(5)
+                ->get();
+  ```
+
+- **Transaction Methods:**  
+  - `beginTransaction()`: Start a transaction.
+  - `commit()`: Commit the current transaction.
+  - `rollBack()`: Roll back the current transaction.
+
+  **Usage:**
+  ```php
+  $sq->beginTransaction();
+  try {
+      // Perform multiple operations
+      $user->save();
+      $order->save();
+      $sq->commit();
+  } catch (\Exception $e) {
+      $sq->rollBack();
+      throw $e;
+  }
+  ```
 
 ### RT Class
 
-- **__construct(array $config = [])**
-  - Initializes the RT application with optional configuration.
+- **`addMiddleware(callable $middleware)`**  
+  Add a middleware function.
   
-- **addMiddleware(callable $middleware)**
-  - Adds a middleware function to the middleware stack.
-  
-- **addView(string $method, string $view, callable $handler)**
-  - Registers a view handler for a specific HTTP method and view name.
-  
-- **run(): array**
-  - Executes the middleware stack and returns the response data.
-  
-- **getFullUrl(string $view, array $params = []): string**
-  - Generates a full URL for a given view with optional query parameters.
+  **Usage:**
+  ```php
+  $rt->addMiddleware(function($request, $response, $next) {
+      // Middleware logic
+      return $next($request, $response);
+  });
+  ```
 
-### Request Class
-
-- **getQuery(string $key, mixed $default = null): mixed**
-  - Retrieves a query parameter from the URL.
+- **`addView($method, $view, callable $handler)`**  
+  Define a view/route.
   
-- **getMethod(): string**
-  - Retrieves the HTTP method of the request.
+  **Usage:**
+  ```php
+  $rt->addView('GET', 'dashboard', function() {
+      return ['title' => 'Dashboard', 'description' => 'User dashboard overview.'];
+  });
+  ```
+
+- **`getUrl(string $view, array $params = []): string`**  
+  Generate a URL for a view.
   
-- **getBody(): mixed**
-  - Retrieves and decodes the request body.
+  **Usage:**
+  ```php
+  $url = $rt->getUrl('dashboard', ['user_id' => 42]);
+  echo "Dashboard URL: {$url}\n";
+  ```
+
+- **`run()`**  
+  Run the routing system.
   
-- **setHeader(string $name, string $value): void**
-  - Sets a header for the response.
-  
-- **getHeader(string $name): ?string**
-  - Retrieves a specific request header.
-
-### Response Class
-
-- **// Currently empty, can be extended for response handling.**
-
-## License
-
-This project is licensed under the MIT License.
+  **Usage:**
+  ```php
+  $response = $rt->run();
+  // Handle the response as needed
+  ```
