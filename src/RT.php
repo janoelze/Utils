@@ -23,6 +23,15 @@ class RT
     $this->views[strtoupper($method)][$view] = $handler;
   }
 
+  public function getUrl(string $view, array $params = []): string
+  {
+    $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    $query = http_build_query(array_merge(['view' => $view], $params));
+    return "{$scheme}://{$host}{$script}?{$query}";
+  }
+
   public function run()
   {
     $request = new Request();

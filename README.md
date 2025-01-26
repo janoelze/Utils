@@ -134,6 +134,14 @@ if ($data['is_json'] ?? false) {
 }
 ```
 
+#### Generating Full URLs for Views
+
+```php
+// Example usage of getUrl method
+$fullUrl = $rt->getUrl('home', ['user' => '123']);
+echo "Full URL to home view: {$fullUrl}";
+```
+
 ## Interface Documentation
 
 ### SQ Class
@@ -181,6 +189,9 @@ if ($data['is_json'] ?? false) {
   
 - **run(): array**
   - Executes the middleware stack and returns the response data.
+  
+- **getFullUrl(string $view, array $params = []): string**
+  - Generates a full URL for a given view with optional query parameters.
 
 ### Request Class
 
