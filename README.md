@@ -101,8 +101,9 @@ if ($response['is_json'] ?? false) {
 
 - **`dispense(string $type): SQBean`**  
   Create a new bean of the given type.
-  
+
   **Usage:**
+
   ```php
   $user = $sq->dispense('user');
   $user->name = 'Jane Doe';
@@ -111,32 +112,36 @@ if ($response['is_json'] ?? false) {
 
 - **`find(string $type, array $criteria = []): array`**  
   Find beans based on criteria.
-  
+
   **Usage:**
+
   ```php
   $users = $sq->find('user', ['name' => 'Jane Doe']);
   ```
 
 - **`findOne(string $type, array $criteria = []): ?SQBean`**  
   Find a single bean.
-  
+
   **Usage:**
+
   ```php
   $user = $sq->findOne('user', ['id' => 1]);
   ```
 
 - **`execute(string $sql, array $params = []): array`**  
   Execute a custom SQL query.
-  
+
   **Usage:**
+
   ```php
   $results = $sq->execute('SELECT * FROM user WHERE email = ?', ['jane.doe@example.com']);
   ```
 
 - **`query(string $table): SQQueryBuilder`**  
   Start a query builder for the table.
-  
+
   **Usage:**
+
   ```php
   $products = $sq->query('product')
                 ->where('price', '>', 100)
@@ -145,12 +150,14 @@ if ($response['is_json'] ?? false) {
                 ->get();
   ```
 
-- **Transaction Methods:**  
+- **Transaction Methods:**
+
   - `beginTransaction()`: Start a transaction.
   - `commit()`: Commit the current transaction.
   - `rollBack()`: Roll back the current transaction.
 
   **Usage:**
+
   ```php
   $sq->beginTransaction();
   try {
@@ -164,33 +171,86 @@ if ($response['is_json'] ?? false) {
   }
   ```
 
+## RT Class
+
+### RT Usage Example
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+use JanOelze\Utils\RT;
+
+// Initialize the routing system with default configuration
+
+$rt = new RT(['default_view' => 'home']);
+
+$rt->addView('GET', 'home', function() {
+    return ['title' => 'Home', 'description' => 'Welcome to the homepage.'];
+});
+
+$rt->addView('GET', 'about-us', function() {
+    return ['title' => 'About Us', 'description' => 'Our company information.'];
+});
+
+$rt->addView('POST', 'submit', function($request, $response) {
+    $data = $request->getBody();
+    // Process form data...
+    return ['status' => 'Form submitted successfully.'];
+});
+
+$data = $rt->run();
+
+?>
+<!DOCTYPE html>
+  <head>
+      <title><?= $data['title'] ?></title>
+  </head>
+  <body>
+      <nav>
+          <ul>
+              <li><a href="<?= $rt->getUrl('home') ?>">Home</a></li>
+              <li><a href="<?= $rt->getUrl('about-us') ?>">About Us</a></li>
+          </ul>
+      </nav>
+      <h1><?= $data['title'] ?></h1>
+      <p><?= $data['description'] ?></p>
+  </body>
+</html>
+```
+
 ### RT Class
 
 - **`addMiddleware(callable $middleware)`**  
   Add a middleware function.
-  
+
   **Usage:**
+
   ```php
   $rt->addMiddleware(function($request, $response, $next) {
-      // Middleware logic
+      // Perform middleware logic…
       return $next($request, $response);
   });
   ```
 
 - **`addView($method, $view, callable $handler)`**  
   Define a view/route.
-  
+
   **Usage:**
+
   ```php
+  // Define a GET route for /?view=dashboard
   $rt->addView('GET', 'dashboard', function() {
+      // Return view data
       return ['title' => 'Dashboard', 'description' => 'User dashboard overview.'];
   });
   ```
 
 - **`getUrl(string $view, array $params = []): string`**  
   Generate a URL for a view.
-  
+
   **Usage:**
+
   ```php
   $url = $rt->getUrl('dashboard', ['user_id' => 42]);
   echo "Dashboard URL: {$url}\n";
@@ -198,8 +258,9 @@ if ($response['is_json'] ?? false) {
 
 - **`run()`**  
   Run the routing system.
-  
+
   **Usage:**
+
   ```php
   $response = $rt->run();
   // Handle the response as needed
