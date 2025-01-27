@@ -9,13 +9,13 @@ class RTTest extends TestCase
   {
     // Simulate a GET request
     $_SERVER['REQUEST_METHOD'] = 'GET';
-    $_GET['view'] = 'home';
+    $_GET['page'] = 'home';
 
     $rt = new RT([
-      'default_view' => 'home',
+      'default_page' => 'home',
     ]);
 
-    $rt->addView('GET', 'home', function () {
+    $rt->addPage('GET', 'home', function () {
       return [
         'title' => 'Hello, world!',
         'description' => 'This is a simple example of a route.',
@@ -31,14 +31,14 @@ class RTTest extends TestCase
   {
     // Simulate a POST request
     $_SERVER['REQUEST_METHOD'] = 'POST';
-    $_GET['view'] = 'api';
+    $_GET['page'] = 'api';
     $_POST['name'] = 'Alice';
 
     $rt = new RT([
-      'default_view' => 'home',
+      'default_page' => 'home',
     ]);
 
-    $rt->addView('POST', 'api', function ($req) {
+    $rt->addPage('POST', 'api', function ($req) {
       return [
         'user' => $_POST['name'],
       ];

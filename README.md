@@ -15,9 +15,9 @@ You can install the package via composer:
 composer require janoelze/utils
 ```
 
-## Usage
+## SQ Class
 
-### SQ Usage Example
+### Using SQ
 
 ```php
 <?php
@@ -60,7 +60,7 @@ if ($user) {
 use JanOelze\Utils\RT;
 
 // Initialize the routing system with default configuration
-$rt = new RT(['default_view' => 'home']);
+$rt = new RT(['default_page' => 'home']);
 
 // Add middleware for authentication
 $rt->addMiddleware(function($request, $response, $next) {
@@ -69,20 +69,20 @@ $rt->addMiddleware(function($request, $response, $next) {
     return $next($request, $response);
 });
 
-// Define a GET route for the home view
-$rt->addView('GET', 'home', function() {
+// Define a GET route for the home page
+$rt->addPage('GET', 'home', function() {
     return ['title' => 'Home', 'description' => 'Welcome to the homepage.'];
 });
 
 // Define a POST route for submitting a form
-$rt->addView('POST', 'submit', function($request, $response) {
+$rt->addPage('POST', 'submit', function($request, $response) {
     $data = $request->getBody();
     // Process form data
     // ...
     return ['status' => 'Form submitted successfully.'];
 });
 
-// Generate a URL for the home view with parameters
+// Generate a URL for the home page with parameters
 $url = $rt->getUrl('home', ['ref' => 'newsletter']);
 echo "Home URL: {$url}\n";
 
@@ -97,7 +97,7 @@ if ($response['is_json'] ?? false) {
 ?>
 ```
 
-### SQ Class
+### Class Documentation
 
 - **`dispense(string $type): SQBean`**  
   Create a new bean of the given type.
@@ -173,7 +173,9 @@ if ($response['is_json'] ?? false) {
 
 ## RT Class
 
-### RT Usage Example
+`RT` is a basic routing system that allows you to define routes and pages for your application. It supports middleware, page handlers, and URL generation. Pages are exposed via the ?page= parameter in the URL, and the default page can be set in the configuration.
+
+### Using RT
 
 ```php
 <?php
@@ -183,17 +185,17 @@ use JanOelze\Utils\RT;
 
 // Initialize the routing system with default configuration
 
-$rt = new RT(['default_view' => 'home']);
+$rt = new RT(['default_page' => 'home']);
 
-$rt->addView('GET', 'home', function() {
+$rt->addPage('GET', 'home', function() {
     return ['title' => 'Home', 'description' => 'Welcome to the homepage.'];
 });
 
-$rt->addView('GET', 'about-us', function() {
+$rt->addPage('GET', 'about-us', function() {
     return ['title' => 'About Us', 'description' => 'Our company information.'];
 });
 
-$rt->addView('POST', 'submit', function($request, $response) {
+$rt->addPage('POST', 'submit', function($request, $response) {
     $data = $request->getBody();
     // Process form data...
     return ['status' => 'Form submitted successfully.'];
@@ -219,7 +221,7 @@ $data = $rt->run();
 </html>
 ```
 
-### RT Class
+### Class Documentation
 
 - **`addMiddleware(callable $middleware)`**  
   Add a middleware function.
@@ -233,21 +235,21 @@ $data = $rt->run();
   });
   ```
 
-- **`addView($method, $view, callable $handler)`**  
-  Define a view/route.
+- **`addPage($method, $page, callable $handler)`**  
+  Define a page/route.
 
   **Usage:**
 
   ```php
-  // Define a GET route for /?view=dashboard
-  $rt->addView('GET', 'dashboard', function() {
-      // Return view data
+  // Define a GET route for /?page=dashboard
+  $rt->addPage('GET', 'dashboard', function() {
+      // Return page data
       return ['title' => 'Dashboard', 'description' => 'User dashboard overview.'];
   });
   ```
 
-- **`getUrl(string $view, array $params = []): string`**  
-  Generate a URL for a view.
+- **`getUrl(string $page, array $params = []): string`**  
+  Generate a URL for a page.
 
   **Usage:**
 

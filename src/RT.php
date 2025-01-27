@@ -6,7 +6,7 @@ class RT
 {
   private $config;
   private $middlewares = [];
-  private $views = [];
+  private $pages = [];
 
   public function __construct(array $config = [])
   {
@@ -18,17 +18,17 @@ class RT
     $this->middlewares[] = $middleware;
   }
 
-  public function addView($method, $view, callable $handler)
+  public function addPage($method, $page, callable $handler)
   {
-    $this->views[strtoupper($method)][$view] = $handler;
+    $this->pages[strtoupper($method)][$page] = $handler;
   }
 
-  public function getUrl(string $view, array $params = []): string
+  public function getUrl(string $page, array $params = []): string
   {
     $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    $query = http_build_query(array_merge(['view' => $view], $params));
+    $query = http_build_query(array_merge(['page' => $page], $params));
     return "{$scheme}://{$host}{$script}?{$query}";
   }
 
@@ -37,7 +37,7 @@ class RT
     $request = new Request();
     $response = new Response();
 
-    $viewName = $request->getQuery('view', $this->config['default_view'] ?? 'home');
+    $pageName = $request->getQuery('page', $this->config['default_page'] ?? 'home');
     $method = strtoupper($request->getMethod());
 
     $middlewareIndex = 0;
@@ -54,8 +54,8 @@ class RT
 
     $runMiddlewares($request, $response);
 
-    if (isset($this->views[$method][$viewName])) {
-      $handler = $this->views[$method][$viewName];
+    if (isset($this->pages[$method][$pageName])) {
+      $handler = $this->pages[$method][$pageName];
       $ref = new \ReflectionFunction($handler);
       $numParams = $ref->getNumberOfParameters();
 
@@ -69,7 +69,7 @@ class RT
     } else {
       $data = [
         'title' => '404 Not Found',
-        'description' => 'No matching route/view found.',
+        'description' => 'No matching page found.',
       ];
     }
 
