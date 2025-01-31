@@ -312,6 +312,17 @@ class SQQueryBuilder
 
   public function get(): array
   {
+    // Check if the table exists
+    $stmt = $this->orm->getPDO()->prepare(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name = ? LIMIT 1"
+    );
+    $stmt->execute([$this->table]);
+    $exists = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$exists) {
+      return [];
+    }
+
     $whereClauses = [];
     $params       = [];
     foreach ($this->wheres as $w) {

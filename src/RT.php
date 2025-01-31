@@ -7,6 +7,7 @@ class RT
   private $config;
   private $middlewares = [];
   private $pages = [];
+  private $currentPage;
 
   public function __construct(array $config = [])
   {
@@ -18,6 +19,18 @@ class RT
     $this->middlewares[] = $middleware;
   }
 
+  public function sendJson($data)
+  {
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode($data);
+    exit;
+  }
+
+  public function setHeader($name, $value)
+  {
+    header("$name: $value");
+  }
+
   public function addPage($method, $page, callable $handler)
   {
     $this->pages[strtoupper($method)][$page] = $handler;
@@ -25,25 +38,32 @@ class RT
 
   public function getUrl(string $page, array $params = []): string
   {
-    $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http';
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    $query = http_build_query(array_merge(['page' => $page], $params));
-    return "{$scheme}://{$host}{$script}?{$query}";
+    $baseUrl = $this->config['base_url'] ?? null;
+    if ($baseUrl) {
+      $query = http_build_query(array_merge([$this->config['page_param'] => $page], $params));
+      return rtrim($baseUrl, '/') . "/?{$query}";
+    } else {
+      $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http';
+      $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+      $script = $_SERVER['SCRIPT_NAME'] ?? '';
+      $query = http_build_query(array_merge([$this->config['page_param'] => $page], $params));
+      return "{$scheme}://{$host}{$script}?{$query}";
+    }
   }
 
   public function run()
   {
     $request = new Request();
-    $response = new Response();
+    $page_param = $this->config['page_param'] ?? 'page';
 
-    $pageName = $request->getQuery('page', $this->config['default_page'] ?? 'home');
+    $pageName = $request->getQuery($page_param, $this->config['default_page'] ?? 'home');
+    $this->currentPage = $pageName;
     $method = strtoupper($request->getMethod());
 
     $middlewareIndex = 0;
     $middlewares = $this->middlewares;
 
-    $runMiddlewares = function ($req, $res) use (&$middlewareIndex, $middlewares, &$runMiddlewares) {
+    $runMiddlewares = function ($req) use (&$middlewareIndex, $middlewares, &$runMiddlewares) {
       if (!isset($middlewares[$middlewareIndex])) {
         return null;
       }
@@ -52,7 +72,7 @@ class RT
       return $middleware($req, $res, $runMiddlewares);
     };
 
-    $runMiddlewares($request, $response);
+    $runMiddlewares($request);
 
     if (isset($this->pages[$method][$pageName])) {
       $handler = $this->pages[$method][$pageName];
@@ -64,7 +84,7 @@ class RT
       } elseif ($numParams === 1) {
         $data = $handler($request);
       } else {
-        $data = $handler($request, $response);
+        $data = $handler($request);
       }
     } else {
       $data = [
@@ -78,6 +98,24 @@ class RT
     }
 
     return $data;
+  }
+
+  public function getCurrentPage(): string
+  {
+    return $this->currentPage;
+  }
+
+  public function redirect(string $url)
+  {
+    header("Location: $url");
+    exit;
+  }
+
+  // Aliases
+
+  public function json($data)
+  {
+    $this->sendJson($data);
   }
 }
 
@@ -93,6 +131,11 @@ class Request
   public function getMethod()
   {
     return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+  }
+
+  public function getPost($key, $default = null)
+  {
+    return $_POST[$key] ?? $default;
   }
 
   public function getBody()
@@ -112,5 +155,3 @@ class Request
     return $this->headers[$name] ?? null;
   }
 }
-
-class Response {}

@@ -2,6 +2,17 @@
 
 `Utils` is a collection of – somewhat naive – utility classes for PHP applications, including `SQ`, a simple SQLite ORM, and `RT`, a basic routing system.
 
+## Table of Contents
+
+- [Includes](#includes)
+- [Installation](#installation)
+- [SQ Class](#sq-class)
+  - [Using SQ](#using-sq)
+  - [Class Documentation](#class-documentation)
+- [RT Class](#rt-class)
+  - [Using RT](#using-rt)
+  - [Class Documentation](#class-documentation-1)
+
 ## Includes
 
 - [SQ](#sq-class): A simple SQLite ORM
@@ -16,6 +27,8 @@ composer require janoelze/utils
 ```
 
 ## SQ Class
+
+`SQ` is a simple SQLite ORM that provides methods to interact with SQLite databases effortlessly.
 
 ### Using SQ
 
@@ -49,50 +62,6 @@ if ($user) {
 $user = $sq->findOne('user', ['id' => 1]);
 if ($user) {
     $user->delete();
-}
-?>
-```
-
-### RT Usage Example
-
-```php
-<?php
-use JanOelze\Utils\RT;
-
-// Initialize the routing system with default configuration
-$rt = new RT(['default_page' => 'home']);
-
-// Add middleware for authentication
-$rt->addMiddleware(function($request, $response, $next) {
-    // Authentication logic here
-    // ...
-    return $next($request, $response);
-});
-
-// Define a GET route for the home page
-$rt->addPage('GET', 'home', function() {
-    return ['title' => 'Home', 'description' => 'Welcome to the homepage.'];
-});
-
-// Define a POST route for submitting a form
-$rt->addPage('POST', 'submit', function($request, $response) {
-    $data = $request->getBody();
-    // Process form data
-    // ...
-    return ['status' => 'Form submitted successfully.'];
-});
-
-// Generate a URL for the home page with parameters
-$url = $rt->getUrl('home', ['ref' => 'newsletter']);
-echo "Home URL: {$url}\n";
-
-// Run the routing system
-$response = $rt->run();
-if ($response['is_json'] ?? false) {
-    header('Content-Type: application/json');
-    echo json_encode($response);
-} else {
-    echo "Title: {$response['title']}\nDescription: {$response['description']}\n";
 }
 ?>
 ```
@@ -171,6 +140,42 @@ if ($response['is_json'] ?? false) {
   }
   ```
 
+- **`getPDO(): PDO`**  
+  Retrieve the underlying PDO instance.
+
+  **Usage:**
+
+  ```php
+  $pdo = $sq->getPDO();
+  ```
+
+- **`ensureTableExists(string $table, SQBean $bean)`**  
+  Ensure that a table exists in the database.
+
+  **Usage:**
+
+  ```php
+  $sq->ensureTableExists('users', $user);
+  ```
+
+- **`addColumn(string $table, string $column, string $type)`**  
+  Add a new column to a table.
+
+  **Usage:**
+
+  ```php
+  $sq->addColumn('users', 'age', 'INTEGER');
+  ```
+
+- **`getTableSchema(string $table): array`**  
+  Get the schema of a table.
+
+  **Usage:**
+
+  ```php
+  $schema = $sq->getTableSchema('users');
+  ```
+
 ## RT Class
 
 `RT` is a basic routing system that allows you to define routes and pages for your application. It supports middleware, page handlers, and URL generation. Pages are exposed via the ?page= parameter in the URL, and the default page can be set in the configuration.
@@ -235,7 +240,7 @@ $data = $rt->run();
   });
   ```
 
-- **`addPage($method, $page, callable $handler)`**  
+- **`addPage(string $method, string $page, callable $handler)`**  
   Define a page/route.
 
   **Usage:**
@@ -258,12 +263,69 @@ $data = $rt->run();
   echo "Dashboard URL: {$url}\n";
   ```
 
-- **`run()`**  
-  Run the routing system.
+- **`run(): array`**  
+  Run the routing system and retrieve the response data.
 
   **Usage:**
 
   ```php
   $response = $rt->run();
   // Handle the response as needed
+  ```
+
+- **`sendJson($data)`**  
+  Send a JSON response and terminate the script.
+
+  **Usage:**
+
+  ```php
+  $data = ['status' => 'success'];
+  $rt->sendJson($data);
+  ```
+
+- **`setHeader(string $name, string $value)`**  
+  Set an HTTP header.
+
+  **Usage:**
+
+  ```php
+  $rt->setHeader('X-Custom-Header', 'Value');
+  ```
+
+- **`getCurrentPage(): string`**  
+  Get the current page being processed.
+
+  **Usage:**
+
+  ```php
+  $currentPage = $rt->getCurrentPage();
+  echo "Current Page: {$currentPage}";
+  ```
+
+- **`redirect(string $url)`**  
+  Redirect to a specified URL and terminate the script.
+
+  **Usage:**
+
+  ```php
+  $rt->redirect('http://example.com');
+  ```
+
+- **`setConfig(array $config)`**  
+  Update the routing configuration.
+
+  **Usage:**
+
+  ```php
+  $rt->setConfig(['base_url' => 'https://example.com']);
+  ```
+
+- **`getConfig(): array`**  
+  Retrieve the current routing configuration.
+
+  **Usage:**
+
+  ```php
+  $config = $rt->getConfig();
+  print_r($config);
   ```
