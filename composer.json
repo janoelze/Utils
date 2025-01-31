@@ -1,26 +1,27 @@
 {
-	"name": "janoelze/utils",
-	"description": "A PHP toolbox",
-	"type": "library",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Jan Oelze",
-			"email": "hallo@janoelze.de"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"JanOelze\\Utils\\": "src/"
-		}
-	},
-	"require": {
-		"php": ">=8.0"
-	},
-	"scripts": {
-		"test": "vendor/bin/phpunit --testdox"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^11.5"
-	}
+    "name": "janoelze\/utils",
+    "description": "A PHP toolbox",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jan Oelze",
+            "email": "hallo@janoelze.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "JanOelze\\Utils\\": "src\/"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    },
+    "scripts": {
+        "test": "vendor\/bin\/phpunit --testdox"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^11.5"
+    },
+    "version": "0.1.1"
 }
