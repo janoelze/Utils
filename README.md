@@ -10,16 +10,11 @@ A PHP library for quick and dirty, single-file web development.
 
 ## Modules
 
-| Class | Description |
-|-------|-------------|
-| <img width="130" src="https://i.imgur.com/gld2Dg7.png" /> **RT** | A simple router for defining URL handlers. |
-| <img width="130" src="https://i.imgur.com/w1zi5mG.png" /> **SQ** | A lightweight SQLite ORM for database interactions. |
-| <img width="130" src="https://i.imgur.com/EBjA8wx.png" /> **JBS** | A job scheduler for running tasks at specific intervals. |
-| <img width="130" src="https://i.imgur.com/2Tlj3Sa.png" /> **AI** | An interface for generating responses from language models. |
-| <img width="130" src="https://i.imgur.com/UnFuWZR.png" /> **CH** | A cache handler that stores data in files. |
-| <img width="130" src="https://i.imgur.com/5yN8yUQ.png" /> **LG** | A logger that directs output to the console or files. |
-| <img width="130" src="https://i.imgur.com/3HzBMx1.png" /> **VLD** | A validation library with built-in and custom rules. |
-| <img width="130" src="https://i.imgur.com/0sYXsy2.png" /> **ENV** | A manager for environment variables. |
+|  |  |  |
+|-------|-------------|--|
+| [RT](#rt-class) | [SQ](#sq-class) | [JBS](#jbs-class) |
+| [AI](#ai-class) | [CH](#ch-class) | [LG](#lg-class) |
+| [VLD](#vld-class) | [ENV](#env-class) |  |
 
 ## Installation
 
