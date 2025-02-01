@@ -159,68 +159,79 @@ echo $data['title'];
 
 ### SQ Class
 
-`SQ` is a SQLite database wrapper that automatically manages tables/columns and provides a simple interface for CRUD operations.
+SQ is a lightweight SQLite ORM that simplifies database interactions. It automatically 
+creates tables, manages columns, and provides simple CRUD operations.
 
-- `__construct(string $path)`:<br>
-  Creates a new SQLite connection using the specified database file.
-- `dispense(string $type)`:<br>
-  Returns a new SQBean instance for the defined table type.
-- `find(string $type, array $criteria = [])`:<br>
-  Retrieves records matching specific criteria; returns an array of SQBean objects.
-- `findOne(string $type, array $criteria = [])`:<br>
-  Retrieves a single record that matches the criteria.
-- `execute(string $sql, array $params = [])`:<br>
-  Executes a raw SQL statement and returns the result set.
-- `query(string $table)`:<br>
-  Returns a query builder for constructing custom SQL queries.
-- `beginTransaction()`:<br>
-  Starts a new database transaction.
-- `commit()`:<br>
-  Commits the current transaction.
-- `rollBack()`:<br>
-  Reverts the current transaction.
-- `getPDO()`:<br>
-  Retrieves the PDO instance used for database operations.
-- `ensureTableExists(string $table, SQBean $bean)`:<br>
-  Checks if a table exists and creates it if necessary.
-- `addColumn(string $table, string $column, string $type)`:<br>
-  Adds a new column to an existing table.
-- `getTableSchema(string $table)`:<br>
-  Returns the current schema of the specified table.
+#### Key Methods
 
+- __construct(string $path): Initializes the SQLite connection with the specified file.
+- dispense(string $type): Returns a new SQBean instance for the given table type.
+- find(string $type, array $criteria = []): Retrieves records matching criteria; returns an array of SQBean objects.
+- findOne(string $type, array $criteria = []): Retrieves the first matching record.
+- execute(string $sql, array $params = []): Executes a raw SQL statement.
+- query(string $table): Returns a query builder for constructing custom queries.
+- beginTransaction(), commit(), rollBack(): Manage transactions.
+- getPDO(): Returns the underlying PDO instance.
+- ensureTableExists(string $table, SQBean $bean): Ensures the table exists (creates it if needed) and caches its schema.
+- addColumn(string $table, string $column, string $type): Adds a new column to an existing table.
+- getTableSchema(string $table): Returns the cached schema for the table.
+
+#### How SQ Works
+
+When you save a record using an SQBean instance:
+1. SQ verifies if the table exists; if not, it creates one.
+2. It inspects the fields of the SQBean and automatically adds any missing columns, inferring the data type (INTEGER, REAL, TEXT).
+3. Depending on whether the bean is new, SQ either inserts a new record or updates an existing one.
+
+#### Examples
+
+Creating and saving a record:
 ```php
 use JanOelze\Utils\SQ;
 
-// Initialize the SQ instance with a SQLite database file.
-$sq = new SQ('./database.sqlite');
-
-// Create a new user record and save it.
-// The table will be created automatically if it doesn't exist.
+$sq = new SQ('./my_database.sqlite');
 $user = $sq->dispense('user');
 $user->name  = 'Alice';
 $user->email = 'alice@example.com';
 $user->save();
-
-// Find all users with the name "Alice".
-$users = $sq->find('user', ['name' => 'Alice']);
-
-// Iterate over the results and print the email addresses.
-foreach ($users as $user) {
-  echo $user->email;
-}
-
-// We can also execute raw SQL queries.
-$users = $sq->execute('SELECT * FROM user WHERE name = ?', ['Alice']);
-
-// Or use the query builder for more complex queries.
-$query = $sq->query('user')
-            ->where('email', 'LIKE', '%example.com%')
-            ->orderBy('name')
-            ->limit(10)
-            ->get();
 ```
 
-Check the example app [using RT and SQ](https://github.com/janoelze/Utils/tree/main/examples/simple-html-app).
+Fetching records:
+```php
+// Find all users with the name 'Alice'
+$users = $sq->find('user', ['name' => 'Alice']);
+
+// Find a single user by email
+$user = $sq->findOne('user', ['email' => 'alice@example.com']);
+```
+
+Building a custom query:
+```php
+$results = $sq->query('user')
+    ->where('email', 'LIKE', '%@example.com')
+    ->orderBy('id', 'DESC')
+    ->limit(5)
+    ->get();
+```
+
+Using transactions:
+```php
+try {
+    $sq->beginTransaction();
+
+    $user = $sq->dispense('user');
+    $user->name  = 'Bob';
+    $user->email = 'bob@example.com';
+    $user->save();
+
+    // ... other operations ...
+
+    $sq->commit();
+} catch (\Exception $e) {
+    $sq->rollBack();
+    // Handle exception as needed.
+}
+```
 
 <hr>
 
@@ -252,7 +263,7 @@ if ($vld->isValid('email', 'test@example.com')) {
 }
 ```
 
-**Built-in Validation Rules:**
+**Built-in rules:**
 
 email, url, ip, ipv4, ipv6, domain, hostname, alpha, alphaNumeric, numeric, integer, float, boolean, hex, base64, json, date, time, dateTime, creditCard, uuid, macAddress, md5, sha1, sha256, sha512, isbn, issn
 
