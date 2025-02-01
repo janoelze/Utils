@@ -379,41 +379,6 @@ if (!isset($res['error'])) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/0sYXsy2.png" />
-  <br>
-</p>
-
-### ENV Class
-
-`ENV` manages environment variables. It loads global environment variables and merges them with values from a provided .env file if it exists.
-
-- `__construct(?string $envFilePath = null)`:<br>
-  Initializes the ENV instance by loading global environment variables and merging them with values from a provided .env file if it exists.
-- `get(?string $key = null)`:<br>
-  Retrieves a specific environment variable when a key is provided, or returns all environment variables otherwise.
-- `set(string $key, $value)`:<br>
-  Sets an environment variable in the internal storage and updates the system environment.
-
-```php
-use JanOelze\Utils\ENV;
-
-// Initialize the ENV instance with a .env file.
-$env = new ENV(__DIR__ . '/.env');
-
-// Get all environment variables.
-print_r($env->get());
-
-// Get the value of a specific environment variable.
-echo $env->get('APP_ENV');
-
-// Set a new environment variable.
-$env->set('DEBUG', true);
-```
-
-<hr>
-
-<p align="left">
-  <br>
   <img width="130" src="https://i.imgur.com/UnFuWZR.png" />
   <br>
 </p>
@@ -567,4 +532,39 @@ if ($vld->isValid('licensePlate', 'ABC-1234')) {
 } else {
     echo "Invalid license plate!";
 }
+```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/0sYXsy2.png" />
+  <br>
+</p>
+
+### ENV Class
+
+`ENV` manages environment variables. It loads global environment variables and merges them with values from a provided .env file if it exists.
+
+- `__construct(?string $envFilePath = null)`:<br>
+  Initializes the ENV instance by loading global environment variables and merging them with values from a provided .env file if it exists.
+- `get(?string $key = null)`:<br>
+  Retrieves a specific environment variable when a key is provided, or returns all environment variables otherwise.
+- `set(string $key, $value)`:<br>
+  Sets an environment variable in the internal storage and updates the system environment.
+
+```php
+use JanOelze\Utils\ENV;
+
+// Initialize the ENV instance with a .env file.
+$env = new ENV(__DIR__ . '/.env');
+
+// Get all environment variables.
+print_r($env->get());
+
+// Get the value of a specific environment variable.
+echo $env->get('APP_ENV');
+
+// Set a new environment variable.
+$env->set('DEBUG', true);
 ```
