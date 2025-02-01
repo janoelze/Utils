@@ -440,7 +440,7 @@ print_r($res);
 
 ### Prompt Builder
 
-The prompt builder simplifies the creation of multi-message prompts. It allows you to add system messages (which are combined) and multiple user messages separately.
+The prompt builder simplifies the creation of multi-message prompts. It handles replacing placeholders in messages and provides a convenient way to construct prompts.
 
 - `addSystemMessage(string $message, array $params = [])`:<br>
   Adds a system message, replacing placeholders with provided parameters.
@@ -450,8 +450,6 @@ The prompt builder simplifies the creation of multi-message prompts. It allows y
   Returns the constructed prompt as an array.
 - `__toString()`:<br>
   Provides a string representation for debugging.
-
-### AI & Prompt Builder Example Code
 
 ```php
 // Create a new prompt
