@@ -282,7 +282,7 @@ if ($vld->isValid('license-plate', 'ABC-1234')) {
 
 ### JBS Class
 
-`JBS` is a simple job scheduler and executor that manages background jobs using an SQLite database. It allows you to schedule jobs to run at specific intervals or execute them manually, and it automatically handles retries and failure callbacks.
+`JBS` allows you to schedule and run jobs at specific intervals. It uses SQLite to store job information and run history.
 
 - `__construct(array $options = [])`:<br>
   Initializes the JBS instance. Options include:
