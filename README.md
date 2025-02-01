@@ -211,7 +211,7 @@ foreach ($users as $user) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/WpvTkX2.png" />
+  <img width="130" src="https://i.imgur.com/3HzBMx1.png" />
   <br>
 </p>
 
