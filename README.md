@@ -311,6 +311,14 @@ $jbs->run();
 $jbs->runJob('fetch-news');
 ```
 
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/5yN8yUQ.png" />
+  <br>
+</p>
+
 ### LG Class
 
 LG is a logger that directs output to the console or files. It supports log levels and ANSI colors for console output.
