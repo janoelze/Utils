@@ -311,7 +311,7 @@ $jbs->schedule('30s', 'fetch-news', function () {
     echo "Fetching news updates...\n";
 });
 
-// Run scheduled jobs.
+// Run scheduled jobs, trigger this from a cron job, for example.
 $jbs->run();
 
 // Manually run a job.
