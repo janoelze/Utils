@@ -279,7 +279,7 @@ if ($vld->isValid('license-plate', 'ABC-1234')) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/CxPo8X3.png" />
+  <img width="130" src="https://i.imgur.com/EBjA8wx.png" />
   <br>
 </p>
 
