@@ -16,7 +16,7 @@ composer require janoelze/utils
 
 View on [Packagist](https://packagist.org/packages/janoelze/utils)
 
-## A simple todo list example
+## Get in loser, we're building a todo list app
 
 ```php
 <?php
