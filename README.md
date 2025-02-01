@@ -105,7 +105,7 @@ $data = $rt->run();
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/FIrFwWF.png" />
+  <img width="130" src="https://i.imgur.com/gld2Dg7.png" />
   <br>
 </p>
 
