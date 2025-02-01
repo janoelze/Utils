@@ -8,6 +8,14 @@
 
 A PHP library for quick and dirty, single-file web development.
 
+## Installation
+
+```bash
+composer require janoelze/utils
+```
+
+View on [Packagist](https://packagist.org/packages/janoelze/utils)
+
 ## A simple todo list example
 
 ```php
@@ -93,12 +101,6 @@ $data = $rt->run();
 </html>
 ```
 
-## Installation
-
-```bash
-composer require janoelze/utils
-```
-
 ## Class Reference
 
 <p align="left">
@@ -108,6 +110,7 @@ composer require janoelze/utils
 </p>
 
 ### RT Class
+
 - `__construct(array $config = [])`:<br>
   Initializes the RT instance with configuration options.
 - `addMiddleware(callable $middleware)`:<br>
@@ -130,6 +133,7 @@ composer require janoelze/utils
   Alias for sendJson().
 
 Demo Code:
+
 ```php
 // Example usage of RT:
 $rt = new RT([
@@ -153,6 +157,7 @@ echo $data['title'];
 </p>
 
 ### SQ Class
+
 - `__construct(string $path)`:<br>
   Creates a new SQLite connection using the specified database file.
 - `dispense(string $type)`:<br>
@@ -181,6 +186,7 @@ echo $data['title'];
   Returns the current schema of the specified table.
 
 Demo Code:
+
 ```php
 // Example usage of SQ:
 $sq = new SQ('./database.sqlite');
