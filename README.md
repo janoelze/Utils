@@ -111,6 +111,8 @@ $data = $rt->run();
 
 ### RT Class
 
+`RT` is a simple router, allowing you to define URL handlers for different HTTP methods.
+
 - `__construct(array $config = [])`:<br>
   Initializes the RT instance with configuration options.
 - `addMiddleware(callable $middleware)`:<br>
@@ -132,7 +134,7 @@ $data = $rt->run();
 - `json($data)`:<br>
   Alias for sendJson().
 
-Demo Code:
+Example Usage:
 
 ```php
 use JanOelze\Utils\RT;
@@ -158,6 +160,8 @@ echo $data['title'];
 </p>
 
 ### SQ Class
+
+`SQ` is a SQLite database wrapper that automatically creates tables/columns and provides a simple interface for CRUD operations.
 
 - `__construct(string $path)`:<br>
   Creates a new SQLite connection using the specified database file.
@@ -186,7 +190,7 @@ echo $data['title'];
 - `getTableSchema(string $table)`:<br>
   Returns the current schema of the specified table.
 
-Demo Code:
+Example Usage:
 
 ```php
 use JanOelze\Utils\SQ;
@@ -212,6 +216,8 @@ foreach ($users as $user) {
 </p>
 
 ### VLD Class
+
+`VLD` is a simple validation library. It comes with many built-in validation rules, but is easily extendable with custom rules.
 
 - `__construct()`: Initializes the VLD instance with built-in validation rules.
 - `addRule(string $ruleName, callable $callable)`: Adds a custom validation rule.
