@@ -313,33 +313,33 @@ $jbs->runJob('fetch-news');
 
 ### LG Class
 
-LG is a simple and flexible logger that allows you to log messages to the console or files. It supports different logging levels and method aliases for convenience.
+LG is a logger that directs output to the console or files. It supports log levels and ANSI colors for console output.
 
-- __construct(array $config = [])  
+- `__construct(array $config = [])`:<br>
   Initializes the logger with options:  
   • date_format: PHP date() format for timestamps.  
   • colors: Enable/disable ANSI colors for console output.  
   • destinations: An array specifying "console" or file paths for logging.
 
-- log(...$messages)  
+- `log(...$messages)`:<br>
   Logs a message at the "LOG" level. Accepts multiple arguments that are concatenated and pretty-prints arrays/objects.
 
-- print(...$messages)  
+- `print(...$messages)`:<br>
   Alias for log(...$messages).
 
-- write(...$messages)  
+- `write(...$messages)`:<br>
   Alias for log(...$messages).
 
-- warn(...$messages)  
+- `warn(...$messages)`:<br>
   Logs a warning message at the "WRN" level.
 
-- error(...$messages)  
+- `error(...$messages)`:<br>
   Logs an error message at the "ERR" level.
 
-- success(...$messages)  
+- `success(...$messages)`:<br>
   Logs a success message at the "SCS" level.
 
-- debug(...$messages)  
+- `debug(...$messages)`:<br>
   Logs a debug message at the "DBG" level.
 
 ```php
