@@ -143,19 +143,19 @@ echo $data['title'];
 </p>
 
 ### SQ Class
-- __construct(string $path): Creates a new SQLite connection using the specified database file.
-- dispense(string $type): Returns a new SQBean instance for the defined table type.
-- find(string $type, array $criteria = []): Retrieves records matching specific criteria; returns an array of SQBean objects.
-- findOne(string $type, array $criteria = []): Retrieves a single record that matches the criteria.
-- execute(string $sql, array $params = []): Executes a raw SQL statement and returns the result set.
-- query(string $table): Returns a query builder for constructing custom SQL queries.
-- beginTransaction(): Starts a new database transaction.
-- commit(): Commits the current transaction.
-- rollBack(): Reverts the current transaction.
-- getPDO(): Retrieves the PDO instance used for database operations.
-- ensureTableExists(string $table, SQBean $bean): Checks if a table exists and creates it if necessary.
-- addColumn(string $table, string $column, string $type): Adds a new column to an existing table.
-- getTableSchema(string $table): Returns the current schema of the specified table.
+- __construct(string $path):<br>Creates a new SQLite connection using the specified database file.
+- dispense(string $type):<br>Returns a new SQBean instance for the defined table type.
+- find(string $type, array $criteria = []):<br>Retrieves records matching specific criteria; returns an array of SQBean objects.
+- findOne(string $type, array $criteria = []):<br>Retrieves a single record that matches the criteria.
+- execute(string $sql, array $params = []):<br>Executes a raw SQL statement and returns the result set.
+- query(string $table):<br>Returns a query builder for constructing custom SQL queries.
+- beginTransaction():<br>Starts a new database transaction.
+- commit():<br>Commits the current transaction.
+- rollBack():<br>Reverts the current transaction.
+- getPDO():<br>Retrieves the PDO instance used for database operations.
+- ensureTableExists(string $table, SQBean $bean):<br>Checks if a table exists and creates it if necessary.
+- addColumn(string $table, string $column, string $type):<br>Adds a new column to an existing table.
+- getTableSchema(string $table):<br>Returns the current schema of the specified table.
 
 Demo Code:
 ```php
