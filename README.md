@@ -159,7 +159,7 @@ echo $data['title'];
 
 ### SQ Class
 
-`SQ` is a SQLite database wrapper that automatically creates tables/columns and provides a simple interface for CRUD operations.
+`SQ` is a SQLite database wrapper that automatically manages tables/columns and provides a simple interface for CRUD operations.
 
 - `__construct(string $path)`:<br>
   Creates a new SQLite connection using the specified database file.
@@ -190,18 +190,37 @@ echo $data['title'];
 
 ```php
 use JanOelze\Utils\SQ;
-// Example usage of SQ:
+
+// Initialize the SQ instance with a SQLite database file.
 $sq = new SQ('./database.sqlite');
+
+// Create a new user record and save it.
+// The table will be created automatically if it doesn't exist.
 $user = $sq->dispense('user');
 $user->name  = 'Alice';
 $user->email = 'alice@example.com';
 $user->save();
 
+// Find all users with the name "Alice".
 $users = $sq->find('user', ['name' => 'Alice']);
+
+// Iterate over the results and print the email addresses.
 foreach ($users as $user) {
   echo $user->email;
 }
+
+// We can also execute raw SQL queries.
+$users = $sq->execute('SELECT * FROM user WHERE name = ?', ['Alice']);
+
+// Or use the query builder for more complex queries.
+$query = $sq->query('user')
+            ->where('email', 'LIKE', '%example.com%')
+            ->orderBy('name')
+            ->limit(10)
+            ->get();
 ```
+
+Check the example app [using RT and SQ](https://github.com/janoelze/Utils/tree/main/examples/simple-html-app).
 
 <hr>
 
@@ -222,7 +241,10 @@ foreach ($users as $user) {
 ```php
 use JanOelze\Utils\VLD;
 
+// Initialize the VLD instance.
 $vld = new VLD();
+
+// Validate an email address.
 if ($vld->isValid('email', 'test@example.com')) {
     echo "Valid email!";
 } else {
@@ -230,45 +252,22 @@ if ($vld->isValid('email', 'test@example.com')) {
 }
 ```
 
-**Built-in Validation Rules:**
-- email
-- url
-- ip
-- ipv4
-- ipv6
-- domain
-- hostname
-- alpha
-- alphaNumeric
-- numeric
-- integer
-- float
-- boolean
-- hex
-- base64
-- json
-- date
-- time
-- dateTime
-- creditCard
-- uuid
-- macAddress
-- md5
-- sha1
-- sha256
-- sha512
-- isbn
-- issn
+Built-in Validation Rules: email, url, ip, ipv4, ipv6, domain, hostname, alpha, alphaNumeric, numeric, integer, float, boolean, hex, base64, json, date, time, dateTime, creditCard, uuid, macAddress, md5, sha1, sha256, sha512, isbn, issn
 
-**Extending with Custom Rules**
+**Adding custom rules:**
 
 To add a custom rule, use the `addRule` method. For example, to validate license plates:
 
 ```php
-$vld->addRule('license-plate', function ($value) {
+use JanOelze\Utils\VLD;
+
+// Register a custom rule for license plates.
+$vld->addRule('licensePlate', function ($value) {
     return preg_match('/^[A-Z]{1,3}-[0-9]{1,4}$/', $value);
 });
-if ($vld->isValid('license-plate', 'ABC-1234')) {
+
+// Validate a license plate.
+if ($vld->isValid('licensePlate', 'ABC-1234')) {
     echo "Valid license plate!";
 } else {
     echo "Invalid license plate!";
