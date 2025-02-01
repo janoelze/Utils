@@ -242,60 +242,6 @@ try {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/3HzBMx1.png" />
-  <br>
-</p>
-
-### VLD Class
-
-`VLD` is a simple validation library. It comes with many built-in validation rules, but is easily extendable with custom rules.
-
-- `__construct()`: Initializes the VLD instance with built-in validation rules.
-- `addRule(string $ruleName, callable $callable)`: Adds a custom validation rule.
-- `isValid(string $ruleName, $value)`: Validates a value against a specified rule.
-
-```php
-use JanOelze\Utils\VLD;
-
-// Initialize the VLD instance.
-$vld = new VLD();
-
-// Validate an email address.
-if ($vld->isValid('email', 'test@example.com')) {
-    echo "Valid email!";
-} else {
-    echo "Invalid email!";
-}
-```
-
-#### Built-in rules:
-
-email, url, ip, ipv4, ipv6, domain, hostname, alpha, alphaNumeric, numeric, integer, float, boolean, hex, base64, json, date, time, dateTime, creditCard, uuid, macAddress, md5, sha1, sha256, sha512, isbn, issn
-
-#### Adding custom rules:
-
-To add a custom rule, use the `addRule` method. For example, to validate license plates:
-
-```php
-use JanOelze\Utils\VLD;
-
-// Register a custom rule for license plates.
-$vld->addRule('licensePlate', function ($value) {
-    return preg_match('/^[A-Z]{1,3}-[0-9]{1,4}$/', $value);
-});
-
-// Validate a license plate.
-if ($vld->isValid('licensePlate', 'ABC-1234')) {
-    echo "Valid license plate!";
-} else {
-    echo "Invalid license plate!";
-}
-```
-
-<hr>
-
-<p align="left">
-  <br>
   <img width="130" src="https://i.imgur.com/EBjA8wx.png" />
   <br>
 </p>
@@ -334,63 +280,6 @@ $jbs->run();
 
 // Manually run a job.
 $jbs->runJob('fetch-news');
-```
-
-<hr>
-
-<p align="left">
-  <br>
-  <img width="130" src="https://i.imgur.com/5yN8yUQ.png" />
-  <br>
-</p>
-
-### LG Class
-
-LG is a logger that directs output to the console or files. It supports log levels and ANSI colors for console output.
-
-- `__construct(array $config = [])`:<br>
-  Initializes the logger with options:  
-  • date_format: PHP date() format for timestamps.  
-  • colors: Enable/disable ANSI colors for console output.  
-  • destinations: An array specifying "console" or file paths for logging.
-
-- `log(...$messages)`:<br>
-  Logs a message at the "LOG" level. Accepts multiple arguments that are concatenated and pretty-prints arrays/objects.
-
-- `print(...$messages)`:<br>
-  Alias for log(...$messages).
-
-- `write(...$messages)`:<br>
-  Alias for log(...$messages).
-
-- `warn(...$messages)`:<br>
-  Logs a warning message at the "WRN" level.
-
-- `error(...$messages)`:<br>
-  Logs an error message at the "ERR" level.
-
-- `success(...$messages)`:<br>
-  Logs a success message at the "SCS" level.
-
-- `debug(...$messages)`:<br>
-  Logs a debug message at the "DBG" level.
-
-```php
-use JanOelze\Utils\LG;
-
-// Initialize the logger with console and file destinations.
-$lg = new LG([
-  'date_format' => 'd-m-Y H:i:s',
-  'colors'      => true,
-  'destinations'=> ['console', '/path/to/logfile.log']
-]);
-
-// Logs a message at the "LOG" level.
-$lg->log('A simple log message');
-
-// Arguments are concatenated and arrays/objects are pretty-printed.
-$lg->warn('Retried', 3, 'times');
-$lg->error('An error occurred:', $error);
 ```
 
 <hr>
@@ -567,4 +456,115 @@ $ch->set('key2', ['a' => 1, 'b' => 2], '1d');
 
 // Retrieve the array item `a`, it will be restored as an array
 echo $ch->get('key2')['a'];
+```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/5yN8yUQ.png" />
+  <br>
+</p>
+
+### LG Class
+
+LG is a logger that directs output to the console or files. It supports log levels and ANSI colors for console output.
+
+- `__construct(array $config = [])`:<br>
+  Initializes the logger with options:  
+  • date_format: PHP date() format for timestamps.  
+  • colors: Enable/disable ANSI colors for console output.  
+  • destinations: An array specifying "console" or file paths for logging.
+
+- `log(...$messages)`:<br>
+  Logs a message at the "LOG" level. Accepts multiple arguments that are concatenated and pretty-prints arrays/objects.
+
+- `print(...$messages)`:<br>
+  Alias for log(...$messages).
+
+- `write(...$messages)`:<br>
+  Alias for log(...$messages).
+
+- `warn(...$messages)`:<br>
+  Logs a warning message at the "WRN" level.
+
+- `error(...$messages)`:<br>
+  Logs an error message at the "ERR" level.
+
+- `success(...$messages)`:<br>
+  Logs a success message at the "SCS" level.
+
+- `debug(...$messages)`:<br>
+  Logs a debug message at the "DBG" level.
+
+```php
+use JanOelze\Utils\LG;
+
+// Initialize the logger with console and file destinations.
+$lg = new LG([
+  'date_format' => 'd-m-Y H:i:s',
+  'colors'      => true,
+  'destinations'=> ['console', '/path/to/logfile.log']
+]);
+
+// Logs a message at the "LOG" level.
+$lg->log('A simple log message');
+
+// Arguments are concatenated and arrays/objects are pretty-printed.
+$lg->warn('Retried', 3, 'times');
+$lg->error('An error occurred:', $error);
+```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/3HzBMx1.png" />
+  <br>
+</p>
+
+### VLD Class
+
+`VLD` is a simple validation library. It comes with many built-in validation rules, but is easily extendable with custom rules.
+
+- `__construct()`: Initializes the VLD instance with built-in validation rules.
+- `addRule(string $ruleName, callable $callable)`: Adds a custom validation rule.
+- `isValid(string $ruleName, $value)`: Validates a value against a specified rule.
+
+```php
+use JanOelze\Utils\VLD;
+
+// Initialize the VLD instance.
+$vld = new VLD();
+
+// Validate an email address.
+if ($vld->isValid('email', 'test@example.com')) {
+    echo "Valid email!";
+} else {
+    echo "Invalid email!";
+}
+```
+
+#### Built-in rules:
+
+email, url, ip, ipv4, ipv6, domain, hostname, alpha, alphaNumeric, numeric, integer, float, boolean, hex, base64, json, date, time, dateTime, creditCard, uuid, macAddress, md5, sha1, sha256, sha512, isbn, issn
+
+#### Adding custom rules:
+
+To add a custom rule, use the `addRule` method. For example, to validate license plates:
+
+```php
+use JanOelze\Utils\VLD;
+
+// Register a custom rule for license plates.
+$vld->addRule('licensePlate', function ($value) {
+    return preg_match('/^[A-Z]{1,3}-[0-9]{1,4}$/', $value);
+});
+
+// Validate a license plate.
+if ($vld->isValid('licensePlate', 'ABC-1234')) {
+    echo "Valid license plate!";
+} else {
+    echo "Invalid license plate!";
+}
 ```
