@@ -394,8 +394,6 @@ $lg->error('An error occurred:', $error);
 
 <hr>
 
-h1
-
 <p align="left">
   <br>
   <img width="130" src="https://i.imgur.com/2Tlj3Sa.png" />
