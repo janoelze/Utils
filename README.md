@@ -438,7 +438,7 @@ $res = $ai->generate(['What is the meaning of life?'], ['temperature' => 0.5, 'm
 print_r($res);
 ```
 
-### Prompt Builder
+#### Prompt Builder
 
 The prompt builder simplifies the creation of multi-message prompts. It handles replacing placeholders in messages and provides a convenient way to construct prompts.
 
