@@ -202,3 +202,72 @@ foreach ($users as $user) {
   echo $user->email;
 }
 ```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/WpvTkX2.png" />
+  <br>
+</p>
+
+### VLD Class
+
+- `__construct()`: Initializes the VLD instance with built-in validation rules.
+- `addRule(string $ruleName, callable $callable)`: Adds a custom validation rule.
+- `isValid(string $ruleName, $value)`: Validates a value against a specified rule.
+
+**Example usage:**
+```php
+use JanOelze\Utils\VLD;
+
+$vld = new VLD();
+if ($vld->isValid('email', 'test@example.com')) {
+    echo "Valid email!";
+} else {
+    echo "Invalid email!";
+}
+```
+
+**Built-in Validation Rules:**
+- email
+- url
+- ip
+- ipv4
+- ipv6
+- domain
+- hostname
+- alpha
+- alphaNumeric
+- numeric
+- integer
+- float
+- boolean
+- hex
+- base64
+- json
+- date
+- time
+- dateTime
+- creditCard
+- uuid
+- macAddress
+- md5
+- sha1
+- sha256
+- sha512
+- isbn
+- issn
+
+**Extending with Custom Rules:**
+To add a custom rule, use the `addRule` method. For example, to validate license plates:
+```php
+$vld->addRule('license-plate', function ($value) {
+    return preg_match('/^[A-Z]{1,3}-[0-9]{1,4}$/', $value);
+});
+if ($vld->isValid('license-plate', 'ABC-1234')) {
+    echo "Valid license plate!";
+} else {
+    echo "Invalid license plate!";
+}
+```
