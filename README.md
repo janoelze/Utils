@@ -521,6 +521,14 @@ echo $env->get('APP_ENV');
 $env->set('DEBUG', true);
 ```
 
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/UnFuWZR.png" />
+  <br>
+</p>
+
 ### CH Class
 
 `CH` is a cache handler that stores data in files.
