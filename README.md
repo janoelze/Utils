@@ -268,11 +268,11 @@ if ($vld->isValid('email', 'test@example.com')) {
 }
 ```
 
-**Built-in rules:**
+#### Built-in rules:
 
 email, url, ip, ipv4, ipv6, domain, hostname, alpha, alphaNumeric, numeric, integer, float, boolean, hex, base64, json, date, time, dateTime, creditCard, uuid, macAddress, md5, sha1, sha256, sha512, isbn, issn
 
-**Adding custom rules:**
+#### Adding custom rules:
 
 To add a custom rule, use the `addRule` method. For example, to validate license plates:
 
