@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <img width="210" src="https://i.imgur.com/pOoq5TR.png" />
+  <img width="210" src="https://i.imgur.com/19k2dv6.png" />
   <br>
 </p>
 
@@ -103,7 +103,7 @@ composer require janoelze/utils
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/0Z1YbKY.png" />
+  <img width="130" src="https://i.imgur.com/FIrFwWF.png" />
   <br>
 </p>
 
@@ -148,7 +148,7 @@ echo $data['title'];
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/91vnz2C.png" />
+  <img width="130" src="https://i.imgur.com/w1zi5mG.png" />
   <br>
 </p>
 
