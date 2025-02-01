@@ -164,17 +164,17 @@ creates tables, manages columns, and provides simple CRUD operations.
 
 #### Key Methods
 
-- __construct(string $path): Initializes the SQLite connection with the specified file.
-- dispense(string $type): Returns a new SQBean instance for the given table type.
-- find(string $type, array $criteria = []): Retrieves records matching criteria; returns an array of SQBean objects.
-- findOne(string $type, array $criteria = []): Retrieves the first matching record.
-- execute(string $sql, array $params = []): Executes a raw SQL statement.
-- query(string $table): Returns a query builder for constructing custom queries.
-- beginTransaction(), commit(), rollBack(): Manage transactions.
-- getPDO(): Returns the underlying PDO instance.
-- ensureTableExists(string $table, SQBean $bean): Ensures the table exists (creates it if needed) and caches its schema.
-- addColumn(string $table, string $column, string $type): Adds a new column to an existing table.
-- getTableSchema(string $table): Returns the cached schema for the table.
+- `__construct(string $path):`:<br>Initializes the SQLite connection with the specified file.
+- `dispense(string $type):`:<br>Returns a new SQBean instance for the given table type.
+- `find(string $type, array $criteria = []):`:<br>Retrieves records matching criteria; returns an array of SQBean objects.
+- `findOne(string $type, array $criteria = []):`:<br>Retrieves the first matching record.
+- `execute(string $sql, array $params = []):`:<br>Executes a raw SQL statement.
+- `query(string $table):`:<br>Returns a query builder for constructing custom queries.
+- `beginTransaction(), commit(), rollBack():`:<br>Manage transactions.
+- `getPDO():`:<br>Returns the underlying PDO instance.
+- `ensureTableExists(string $table, SQBean $bean):`:<br>Ensures the table exists (creates it if needed) and caches its schema.
+- `addColumn(string $table, string $column, string $type):`:<br>Adds a new column to an existing table.
+- `getTableSchema(string $table):`:<br>Returns the cached schema for the table.
 
 #### How SQ Works
 
