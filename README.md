@@ -279,3 +279,39 @@ if ($vld->isValid('license-plate', 'ABC-1234')) {
     echo "Invalid license plate!";
 }
 ```
+
+### JBS Class
+
+`JBS` is a simple job scheduler and executor that manages background jobs using an SQLite database. It allows you to schedule jobs to run at specific intervals or execute them manually, and it automatically handles retries and failure callbacks.
+
+- `__construct(array $options = [])`:<br>
+  Initializes the JBS instance. Options include:
+  - `db`: the SQLite database file path (default: `./jobs.sqlite`)
+  - `retention`: the number of seconds to keep run records (default: 1 week)
+- `schedule(string|false $interval, string $jobId, callable $callback)`:<br>
+  Registers a job. Use a human‑readable interval (e.g., "30s", "1m") or `false` for manual execution.
+- `onFailure(callable $callback)`:<br>
+  Sets a callback that is called after a job has failed 3 times. The callback receives the job ID and the output from the final attempt.
+- `run()`:<br>
+  Executes all scheduled jobs with a valid interval. Typically triggered by a cron job.
+- `runJob(string $jobId)`:<br>
+  Manually executes a job by its identifier.
+- `clear()`:<br>
+  Clears all registered jobs.
+
+**Example Usage:**
+```php
+use JanOelze\Utils\JBS;
+
+$jbs = new JBS(['db' => './jobs.sqlite']);
+
+// Schedule a job to run every 30 seconds.
+$jbs->schedule('30s', 'fetch-news', function () {
+    echo "Fetching news updates...\n";
+});
+
+// Run scheduled jobs.
+$jbs->run();
+
+// Manually run a job.
+$jbs->runJob('fetch-news');
