@@ -275,6 +275,14 @@ if ($vld->isValid('license-plate', 'ABC-1234')) {
 }
 ```
 
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/CxPo8X3.png" />
+  <br>
+</p>
+
 ### JBS Class
 
 `JBS` allows you to schedule and run jobs at specific intervals. It uses SQLite to store job information and run history.
