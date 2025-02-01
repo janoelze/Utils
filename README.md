@@ -18,6 +18,7 @@ A PHP library for quick and dirty, single-file web development.
 - [**LG**](#lg-class): Logger with colored output and file logging.
 - [**VLD**](#vld-class): Validation library with built-in and custom rules.
 - [**ENV**](#env-class): Environment variable manager.
+- [**FS**](#fs-class): File system operations.
 
 ## Installation
 
