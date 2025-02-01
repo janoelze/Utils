@@ -579,3 +579,70 @@ echo $env->get('APP_ENV');
 // Set a new environment variable.
 $env->set('DEBUG', true);
 ```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/CjOX89L.png" />
+  <br>
+</p>
+
+### FS Class
+
+`FS` is a utility class for file system operations.
+
+- `listFiles(string $pattern): array`:<br>
+  Lists files matching a given glob pattern.
+
+- `copy(string $source, string $destination): bool`:<br>
+  Copies a file or directory. If copying a directory, the operation is recursive.
+
+- `createDirectory(string $directory, int $permissions = 0777): bool`:<br>
+  Recursively creates a directory with specified permissions.
+
+- `remove(string $path): bool`:<br>
+  Removes a file or directory. If a directory, removal is recursive.
+
+- `write(string $path, string $content): bool`:<br>
+  Writes content to a file, overwriting any existing content.
+
+- `append(string $path, string $content): bool`:<br>
+  Appends content to an existing file.
+
+- `read(string $path): string`:<br>
+  Reads and returns the content of a file.
+
+```php
+use JanOelze\Utils\FS;
+
+// Initialize the FS instance.
+$fs = new FS();
+
+// List all PHP files in the current directory.
+$files = $fs->listFiles('*.php');
+
+// Copy a file.
+$fs->copy('source.txt', 'destination.txt');
+
+// Create a new directory.
+$fs->createDirectory('new_directory');
+
+// Remove a file.
+$fs->remove('file.txt');
+
+// Write content to a file.
+$fs->write('file.txt', 'Hello, world!');
+
+// Append content to a file.
+$fs->append('file.txt', 'Goodbye, world!');
+
+// Remove a directory.
+$fs->remove('directory');
+
+// Or file…
+$fs->remove('file.txt');
+
+// Read the content of a file.
+echo $fs->read('file.txt');
+```
