@@ -135,6 +135,7 @@ $data = $rt->run();
 Demo Code:
 
 ```php
+use JanOelze\Utils\RT;
 // Example usage of RT:
 $rt = new RT([
   'base_url'    => 'http://localhost:8000',
@@ -188,6 +189,7 @@ echo $data['title'];
 Demo Code:
 
 ```php
+use JanOelze\Utils\SQ;
 // Example usage of SQ:
 $sq = new SQ('./database.sqlite');
 $user = $sq->dispense('user');
