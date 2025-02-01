@@ -134,8 +134,6 @@ $data = $rt->run();
 - `json($data)`:<br>
   Alias for sendJson().
 
-Example Usage:
-
 ```php
 use JanOelze\Utils\RT;
 // Example usage of RT:
@@ -190,8 +188,6 @@ echo $data['title'];
 - `getTableSchema(string $table)`:<br>
   Returns the current schema of the specified table.
 
-Example Usage:
-
 ```php
 use JanOelze\Utils\SQ;
 // Example usage of SQ:
@@ -223,7 +219,6 @@ foreach ($users as $user) {
 - `addRule(string $ruleName, callable $callable)`: Adds a custom validation rule.
 - `isValid(string $ruleName, $value)`: Validates a value against a specified rule.
 
-**Example usage:**
 ```php
 use JanOelze\Utils\VLD;
 
@@ -299,7 +294,6 @@ if ($vld->isValid('license-plate', 'ABC-1234')) {
 - `clear()`:<br>
   Clears all registered jobs.
 
-**Example Usage:**
 ```php
 use JanOelze\Utils\JBS;
 
@@ -315,3 +309,53 @@ $jbs->run();
 
 // Manually run a job.
 $jbs->runJob('fetch-news');
+```
+
+### LG Class
+
+LG is a simple and flexible logger that allows you to log messages to the console or files. It supports different logging levels and method aliases for convenience.
+
+- __construct(array $config = [])  
+  Initializes the logger with options:  
+  • date_format: PHP date() format for timestamps.  
+  • colors: Enable/disable ANSI colors for console output.  
+  • destinations: An array specifying "console" or file paths for logging.
+
+- log(...$messages)  
+  Logs a message at the "LOG" level. Accepts multiple arguments that are concatenated and pretty-prints arrays/objects.
+
+- print(...$messages)  
+  Alias for log(...$messages).
+
+- write(...$messages)  
+  Alias for log(...$messages).
+
+- warn(...$messages)  
+  Logs a warning message at the "WRN" level.
+
+- error(...$messages)  
+  Logs an error message at the "ERR" level.
+
+- success(...$messages)  
+  Logs a success message at the "SCS" level.
+
+- debug(...$messages)  
+  Logs a debug message at the "DBG" level.
+
+```php
+use JanOelze\Utils\LG;
+
+// Initialize the logger with console and file destinations.
+$lg = new LG([
+  'date_format' => 'd-m-Y H:i:s',
+  'colors'      => true,
+  'destinations'=> ['console', '/path/to/logfile.log']
+]);
+
+// Logs a message at the "LOG" level.
+$lg->log('A simple log message');
+
+// Arguments are concatenated and arrays/objects are pretty-printed.
+$lg->warn('Retried', 3, 'times');
+$lg->error('An error occurred:', $error);
+```
