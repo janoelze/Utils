@@ -101,6 +101,12 @@ composer require janoelze/utils
 
 ## Class Reference
 
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/0Z1YbKY.png" />
+  <br>
+</p>
+
 ### RT Class
 - __construct(array $config = []): Initializes the RT instance with configuration options.
 - addMiddleware(callable $middleware): Registers a middleware to process requests.
@@ -127,6 +133,14 @@ $rt->addPage('GET', 'home', function() {
 $data = $rt->run();
 echo $data['title'];
 ```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/91vnz2C.png" />
+  <br>
+</p>
 
 ### SQ Class
 - __construct(string $path): Creates a new SQLite connection using the specified database file.
