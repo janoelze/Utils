@@ -1,3 +1,9 @@
+<p align="center">
+  <br>
+  <img width="150" src="https://i.imgur.com/pOoq5TR.png" />
+  <br>
+</p>
+
 # Utils
 
 A PHP library for quick and dirty, single-file web development.
