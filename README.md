@@ -1,331 +1,153 @@
 # Utils
 
-`Utils` is a collection of – somewhat naive – utility classes for PHP applications, including `SQ`, a simple SQLite ORM, and `RT`, a basic routing system.
+A PHP library for quick and dirty, single-file web development.
 
-## Table of Contents
-
-- [Includes](#includes)
-- [Installation](#installation)
-- [SQ Class](#sq-class)
-  - [Using SQ](#using-sq)
-  - [Class Documentation](#class-documentation)
-- [RT Class](#rt-class)
-  - [Using RT](#using-rt)
-  - [Class Documentation](#class-documentation-1)
-
-## Includes
-
-- [SQ](#sq-class): A simple SQLite ORM
-- [RT](#rt-class): A basic routing system
-
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require janoelze/utils
-```
-
-## SQ Class
-
-`SQ` is a simple SQLite ORM that provides methods to interact with SQLite databases effortlessly.
-
-### Using SQ
+## A simple todo list example
 
 ```php
 <?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use JanOelze\Utils\RT;
 use JanOelze\Utils\SQ;
 
-// Initialize the ORM with the SQLite database path
-$sq = new SQ('database.sqlite');
+$sq = new SQ('./db.sqlite');
+$rt = new RT([
+  'base_url'    => 'http://localhost:8001',
+  'page_param'  => 'action',
+  'default_page' => 'home',
+]);
 
-// Create a new user
-$user = $sq->dispense('user');
-$user->name = 'John Doe';
-$user->email = 'john.doe@example.com';
-$user->save();
+$rt->addPage('GET', 'home', function () use ($sq) {
+  return [
+    'title' => 'Todo List',
+    'todos' => $sq->find('todo'),
+  ];
+});
 
-// Retrieve users with the name 'John Doe'
-$users = $sq->find('user', ['name' => 'John Doe']);
-foreach ($users as $user) {
-    echo "User ID: {$user->id}, Name: {$user->name}, Email: {$user->email}\n";
-}
+$rt->addPage('POST', 'add-todo', function ($req) use ($rt, $sq) {
+  $title = $req->getPost('title');
+  if (!$title) $rt->redirect($rt->getUrl('home'));
+  $todo = $sq->dispense('todo');
+  $todo->title = $title;
+  $todo->completed = false;
+  $todo->save();
+  $rt->redirect($rt->getUrl('home'));
+});
 
-// Update a user's email
-$user = $sq->findOne('user', ['id' => 1]);
-if ($user) {
-    $user->email = 'new.email@example.com';
-    $user->save();
-}
+$rt->addPage('POST', 'toggle-todo', function ($req) use ($rt, $sq) {
+  $todo = $sq->findOne('todo', [
+    'uuid' => $req->getPost('uuid') ?? null,
+  ]);
 
-// Delete a user
-$user = $sq->findOne('user', ['id' => 1]);
-if ($user) {
-    $user->delete();
-}
-?>
-```
-
-### Class Documentation
-
-- **`dispense(string $type): SQBean`**  
-  Create a new bean of the given type.
-
-  **Usage:**
-
-  ```php
-  $user = $sq->dispense('user');
-  $user->name = 'Jane Doe';
-  $user->save();
-  ```
-
-- **`find(string $type, array $criteria = []): array`**  
-  Find beans based on criteria.
-
-  **Usage:**
-
-  ```php
-  $users = $sq->find('user', ['name' => 'Jane Doe']);
-  ```
-
-- **`findOne(string $type, array $criteria = []): ?SQBean`**  
-  Find a single bean.
-
-  **Usage:**
-
-  ```php
-  $user = $sq->findOne('user', ['id' => 1]);
-  ```
-
-- **`execute(string $sql, array $params = []): array`**  
-  Execute a custom SQL query.
-
-  **Usage:**
-
-  ```php
-  $results = $sq->execute('SELECT * FROM user WHERE email = ?', ['jane.doe@example.com']);
-  ```
-
-- **`query(string $table): SQQueryBuilder`**  
-  Start a query builder for the table.
-
-  **Usage:**
-
-  ```php
-  $products = $sq->query('product')
-                ->where('price', '>', 100)
-                ->orderBy('name')
-                ->limit(5)
-                ->get();
-  ```
-
-- **Transaction Methods:**
-
-  - `beginTransaction()`: Start a transaction.
-  - `commit()`: Commit the current transaction.
-  - `rollBack()`: Roll back the current transaction.
-
-  **Usage:**
-
-  ```php
-  $sq->beginTransaction();
-  try {
-      // Perform multiple operations
-      $user->save();
-      $order->save();
-      $sq->commit();
-  } catch (\Exception $e) {
-      $sq->rollBack();
-      throw $e;
+  if ($todo) {
+    $todo->completed = !$todo->completed;
+    $todo->save();
   }
-  ```
 
-- **`getPDO(): PDO`**  
-  Retrieve the underlying PDO instance.
-
-  **Usage:**
-
-  ```php
-  $pdo = $sq->getPDO();
-  ```
-
-- **`ensureTableExists(string $table, SQBean $bean)`**  
-  Ensure that a table exists in the database.
-
-  **Usage:**
-
-  ```php
-  $sq->ensureTableExists('users', $user);
-  ```
-
-- **`addColumn(string $table, string $column, string $type)`**  
-  Add a new column to a table.
-
-  **Usage:**
-
-  ```php
-  $sq->addColumn('users', 'age', 'INTEGER');
-  ```
-
-- **`getTableSchema(string $table): array`**  
-  Get the schema of a table.
-
-  **Usage:**
-
-  ```php
-  $schema = $sq->getTableSchema('users');
-  ```
-
-## RT Class
-
-`RT` is a basic routing system that allows you to define routes and pages for your application. It supports middleware, page handlers, and URL generation. Pages are exposed via the ?page= parameter in the URL, and the default page can be set in the configuration.
-
-### Using RT
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-use JanOelze\Utils\RT;
-
-// Initialize the routing system with default configuration
-
-$rt = new RT(['default_page' => 'home']);
-
-$rt->addPage('GET', 'home', function() {
-    return ['title' => 'Home', 'description' => 'Welcome to the homepage.'];
-});
-
-$rt->addPage('GET', 'about-us', function() {
-    return ['title' => 'About Us', 'description' => 'Our company information.'];
-});
-
-$rt->addPage('POST', 'submit', function($request, $response) {
-    $data = $request->getBody();
-    // Process form data...
-    return ['status' => 'Form submitted successfully.'];
+  $rt->redirect($rt->getUrl('home'));
 });
 
 $data = $rt->run();
 
 ?>
 <!DOCTYPE html>
-  <head>
-      <title><?= $data['title'] ?></title>
-  </head>
-  <body>
-      <nav>
-          <ul>
-              <li><a href="<?= $rt->getUrl('home') ?>">Home</a></li>
-              <li><a href="<?= $rt->getUrl('about-us') ?>">About Us</a></li>
-          </ul>
-      </nav>
-      <h1><?= $data['title'] ?></h1>
-      <p><?= $data['description'] ?></p>
-  </body>
+<html>
+
+<head>
+  <title><?= $data['title'] ?></title>
+</head>
+
+<body>
+  <h1><?= $data['title'] ?></h1>
+  <?php if (isset($data['todos'])): ?>
+    <ul>
+      <?php foreach ($data['todos'] as $todo): ?>
+        <li>
+          <form method="post" action="<?= $rt->getUrl('toggle-todo') ?>">
+            <input type="hidden" name="uuid" value="<?= $todo->uuid ?>">
+            <label>
+              <input type="checkbox" name="completed"
+                <?= $todo->completed ? 'checked' : '' ?>
+                onchange="this.form.submit()">
+              <?= $todo->title ?>
+            </label>
+          </form>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+  <form method="post" action="<?= $rt->getUrl('add-todo') ?>">
+    <input type="text" name="title" placeholder="Enter a new todo">
+    <button type="submit">Add Todo</button>
+  </form>
+</body>
+
 </html>
 ```
 
-### Class Documentation
+## Installation
 
-- **`addMiddleware(callable $middleware)`**  
-  Add a middleware function.
+```bash
+composer require janoelze/utils
+```
 
-  **Usage:**
+## Class Reference
 
-  ```php
-  $rt->addMiddleware(function($request, $response, $next) {
-      // Perform middleware logic…
-      return $next($request, $response);
-  });
-  ```
+### RT Class
+- __construct(array $config = []): Initializes the RT instance with configuration options.
+- addMiddleware(callable $middleware): Registers a middleware to process requests.
+- sendJson($data): Sends a JSON response to the client.
+- setHeader(string $name, string $value): Sets an HTTP header.
+- addPage(string $method, string $page, callable $handler): Registers a page handler for a given HTTP method and page.
+- getUrl(string $page, array $params = []): Generates a URL based on the provided page and parameters.
+- run(): Processes the current request, executes middlewares and page handlers, and returns the page data.
+- getCurrentPage(): Returns the name of the current page.
+- redirect(string $url): Redirects the request to a specified URL.
+- json($data): Alias for sendJson().
 
-- **`addPage(string $method, string $page, callable $handler)`**  
-  Define a page/route.
+Demo Code:
+```php
+// Example usage of RT:
+$rt = new RT([
+  'base_url'    => 'http://localhost:8000',
+  'page_param'  => 'action',
+  'default_page'=> 'home',
+]);
+$rt->addPage('GET', 'home', function() {
+  return ['title' => 'Welcome', 'content' => 'Hello World!'];
+});
+$data = $rt->run();
+echo $data['title'];
+```
 
-  **Usage:**
+### SQ Class
+- __construct(string $path): Creates a new SQLite connection using the specified database file.
+- dispense(string $type): Returns a new SQBean instance for the defined table type.
+- find(string $type, array $criteria = []): Retrieves records matching specific criteria; returns an array of SQBean objects.
+- findOne(string $type, array $criteria = []): Retrieves a single record that matches the criteria.
+- execute(string $sql, array $params = []): Executes a raw SQL statement and returns the result set.
+- query(string $table): Returns a query builder for constructing custom SQL queries.
+- beginTransaction(): Starts a new database transaction.
+- commit(): Commits the current transaction.
+- rollBack(): Reverts the current transaction.
+- getPDO(): Retrieves the PDO instance used for database operations.
+- ensureTableExists(string $table, SQBean $bean): Checks if a table exists and creates it if necessary.
+- addColumn(string $table, string $column, string $type): Adds a new column to an existing table.
+- getTableSchema(string $table): Returns the current schema of the specified table.
 
-  ```php
-  // Define a GET route for /?page=dashboard
-  $rt->addPage('GET', 'dashboard', function() {
-      // Return page data
-      return ['title' => 'Dashboard', 'description' => 'User dashboard overview.'];
-  });
-  ```
+Demo Code:
+```php
+// Example usage of SQ:
+$sq = new SQ('./database.sqlite');
+$user = $sq->dispense('user');
+$user->name  = 'Alice';
+$user->email = 'alice@example.com';
+$user->save();
 
-- **`getUrl(string $page, array $params = []): string`**  
-  Generate a URL for a page.
-
-  **Usage:**
-
-  ```php
-  $url = $rt->getUrl('dashboard', ['user_id' => 42]);
-  echo "Dashboard URL: {$url}\n";
-  ```
-
-- **`run(): array`**  
-  Run the routing system and retrieve the response data.
-
-  **Usage:**
-
-  ```php
-  $response = $rt->run();
-  // Handle the response as needed
-  ```
-
-- **`sendJson($data)`**  
-  Send a JSON response and terminate the script.
-
-  **Usage:**
-
-  ```php
-  $data = ['status' => 'success'];
-  $rt->sendJson($data);
-  ```
-
-- **`setHeader(string $name, string $value)`**  
-  Set an HTTP header.
-
-  **Usage:**
-
-  ```php
-  $rt->setHeader('X-Custom-Header', 'Value');
-  ```
-
-- **`getCurrentPage(): string`**  
-  Get the current page being processed.
-
-  **Usage:**
-
-  ```php
-  $currentPage = $rt->getCurrentPage();
-  echo "Current Page: {$currentPage}";
-  ```
-
-- **`redirect(string $url)`**  
-  Redirect to a specified URL and terminate the script.
-
-  **Usage:**
-
-  ```php
-  $rt->redirect('http://example.com');
-  ```
-
-- **`setConfig(array $config)`**  
-  Update the routing configuration.
-
-  **Usage:**
-
-  ```php
-  $rt->setConfig(['base_url' => 'https://example.com']);
-  ```
-
-- **`getConfig(): array`**  
-  Retrieve the current routing configuration.
-
-  **Usage:**
-
-  ```php
-  $config = $rt->getConfig();
-  print_r($config);
-  ```
+$users = $sq->find('user', ['name' => 'Alice']);
+foreach ($users as $user) {
+  echo $user->email;
+}
+```

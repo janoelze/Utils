@@ -23,6 +23,17 @@ class SQ
 
   public function find(string $type, array $criteria = []): array
   {
+    // return empty array if table does not exist
+    $stmt = $this->pdo->prepare(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name = ? LIMIT 1"
+    );
+    $stmt->execute([$type]);
+    $exists = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$exists) {
+      return [];
+    }
+
     $where = [];
     $values = [];
     foreach ($criteria as $col => $val) {
@@ -318,7 +329,7 @@ class SQQueryBuilder
     );
     $stmt->execute([$this->table]);
     $exists = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$exists) {
       return [];
     }
