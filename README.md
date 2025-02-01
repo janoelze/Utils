@@ -159,7 +159,7 @@ echo $data['title'];
 
 ### SQ Class
 
-SQ is a lightweight SQLite ORM that simplifies database interactions. It automatically 
+SQ is a lightweight SQLite ORM that simplifies database interactions. It automatically
 creates tables, manages columns, and provides simple CRUD operations.
 
 #### Key Methods
@@ -179,6 +179,7 @@ creates tables, manages columns, and provides simple CRUD operations.
 #### How SQ Works
 
 When you save a record using an SQBean instance:
+
 1. SQ verifies if the table exists; if not, it creates one.
 2. It inspects the fields of the SQBean and automatically adds any missing columns, inferring the data type (INTEGER, REAL, TEXT).
 3. Depending on whether the bean is new, SQ either inserts a new record or updates an existing one.
@@ -186,6 +187,7 @@ When you save a record using an SQBean instance:
 #### Examples
 
 Creating and saving a record:
+
 ```php
 use JanOelze\Utils\SQ;
 
@@ -197,6 +199,7 @@ $user->save();
 ```
 
 Fetching records:
+
 ```php
 // Find all users with the name 'Alice'
 $users = $sq->find('user', ['name' => 'Alice']);
@@ -206,6 +209,7 @@ $user = $sq->findOne('user', ['email' => 'alice@example.com']);
 ```
 
 Building a custom query:
+
 ```php
 $results = $sq->query('user')
     ->where('email', 'LIKE', '%@example.com')
@@ -215,6 +219,7 @@ $results = $sq->query('user')
 ```
 
 Using transactions:
+
 ```php
 try {
     $sq->beginTransaction();
@@ -386,4 +391,91 @@ $lg->log('A simple log message');
 // Arguments are concatenated and arrays/objects are pretty-printed.
 $lg->warn('Retried', 3, 'times');
 $lg->error('An error occurred:', $error);
+```
+
+### AI Class
+
+`AI` is a class that interfaces with various LLM providers (currently only OpenAI) to generate responses based on prompts.
+
+- `__construct(array $config = [])`:<br>
+  Initializes the AI instance using a provider based on the given configuration.
+- `generate($prompt, array $params = [])`:<br>
+  Generates a response. The method formats the prompt as follows:
+  - A single message is treated as a user message.
+  - Two messages with the first being a system message and the second a user message.
+- `prompt()`:<br>
+  Returns a new prompt builder instance.
+
+```php
+use JanOelze\Utils\AI;
+
+// Create a new instance of AI, using the OpenAI endpoint.
+$ai = new AI([
+  'platform' => [
+    'name' => 'openai',
+    'api_key' => $api_key,
+    'model' => 'gpt-4o-mini'
+  ]
+]);
+
+// Query the AI with a simple prompt.
+$res = $ai->generate(['What is the meaning of life?']);
+
+// Check for errors and output the response.
+if (!isset($res['error'])) {
+  echo $res['response'];
+} else {
+  echo 'An error occurred: ' . $res['error'];
+}
+
+// Query the AI with a user and system message.
+$res = $ai->generate(["You're a chatbot.", "What is the meaning of life?"]);
+
+print_r($res);
+
+// Params can be passed to the prompt.
+$res = $ai->generate(['What is the meaning of life?'], ['temperature' => 0.5, 'model' => 'gpt-4o']);
+print_r($res);
+```
+
+### Prompt Builder
+
+The prompt builder simplifies the creation of multi-message prompts. It allows you to add system messages (which are combined) and multiple user messages separately.
+
+- `addSystemMessage(string $message, array $params = [])`:<br>
+  Adds a system message, replacing placeholders with provided parameters.
+- `addUserMessage(string $message, array $params = [])`:<br>
+  Adds a user message with placeholder replacements.
+- `get()`:<br>
+  Returns the constructed prompt as an array.
+- `__toString()`:<br>
+  Provides a string representation for debugging.
+
+### AI & Prompt Builder Example Code
+
+```php
+// Create a new prompt
+$prompt = $ai->prompt();
+
+// Add a system message line
+$prompt->addSystemMessage("Today's secret code is :code", ['code' => rand(1000, 9999)]);
+
+// Add a user message
+$prompt->addUserMessage("What is the secret code?");
+
+// Get the prompt as an array
+print_r($prompt->get());
+// [
+//   "Today's secret code is 7878."
+//   "What is the secret code?"
+// ]
+
+// Generate the response
+$res = $ai->generate($prompt->get());
+
+if (!isset($res['error'])) {
+  echo $res['response'];
+} else {
+  echo 'An error occurred: ' . $res['error'];
+}
 ```
