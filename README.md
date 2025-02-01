@@ -520,3 +520,43 @@ echo $env->get('APP_ENV');
 // Set a new environment variable.
 $env->set('DEBUG', true);
 ```
+
+### CH Class
+
+`CH` is a cache handler that stores data in files.
+
+**Constructor:**
+- __construct(array $config)
+  - Requires a 'dir' option for the cache directory.
+  - Creates the cache directory if it does not exist.
+
+**Methods:**
+- `set(string $key, mixed $value, int|string $expiration)`:<br>
+  Stores a value with a specified expiration time (numeric seconds or human-readable string like "1d").
+- `get(string $key)`:<br>
+  Retrieves the value associated with the given key, or returns null if the cache entry is missing or expired.
+- `clear(string|null $key = null)`:<br>
+  Clears a specific cache entry if a key is provided, otherwise clears all cache files.
+- `getFilePath(string $key)`:<br>
+  Generates and returns the file path for a given cache key.
+- `parseExpiration(int|string $expiration)`:<br>
+  Converts an expiration time (numeric or human-readable) into a Unix timestamp.
+
+```php
+use JanOelze\Utils\CH;
+
+// Initialize the cache handler with a cache directory.
+$ch = new CH(['dir' => __DIR__ . '/cache']);
+
+// Store a value with a 1-hour expiration
+$ch->set('key', 'value', 3600);
+
+// Retrieve the value
+echo $ch->get('key');
+
+// You can also store arrays, or use human-readable expiration times
+$ch->set('key2', ['a' => 1, 'b' => 2], '1d');
+
+// Retrieve the array item `a`, it will be restored as an array
+echo $ch->get('key2')['a'];
+```
