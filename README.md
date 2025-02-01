@@ -108,16 +108,26 @@ composer require janoelze/utils
 </p>
 
 ### RT Class
-- __construct(array $config = []): Initializes the RT instance with configuration options.
-- addMiddleware(callable $middleware): Registers a middleware to process requests.
-- sendJson($data): Sends a JSON response to the client.
-- setHeader(string $name, string $value): Sets an HTTP header.
-- addPage(string $method, string $page, callable $handler): Registers a page handler for a given HTTP method and page.
-- getUrl(string $page, array $params = []): Generates a URL based on the provided page and parameters.
-- run(): Processes the current request, executes middlewares and page handlers, and returns the page data.
-- getCurrentPage(): Returns the name of the current page.
-- redirect(string $url): Redirects the request to a specified URL.
-- json($data): Alias for sendJson().
+- `__construct(array $config = [])`:<br>
+  Initializes the RT instance with configuration options.
+- `addMiddleware(callable $middleware)`:<br>
+  Registers a middleware to process requests.
+- `sendJson($data)`:<br>
+  Sends a JSON response to the client.
+- `setHeader(string $name, string $value)`:<br>
+  Sets an HTTP header.
+- `addPage(string $method, string $page, callable $handler)`:<br>
+  Registers a page handler for a given HTTP method and page.
+- `getUrl(string $page, array $params = [])`:<br>
+  Generates a URL based on the provided page and parameters.
+- `run()`:<br>
+  Processes the current request, executes middlewares and page handlers, and returns the page data.
+- `getCurrentPage()`:<br>
+  Returns the name of the current page.
+- `redirect(string $url)`:<br>
+  Redirects the request to a specified URL.
+- `json($data)`:<br>
+  Alias for sendJson().
 
 Demo Code:
 ```php
