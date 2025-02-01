@@ -259,8 +259,10 @@ if ($vld->isValid('email', 'test@example.com')) {
 - isbn
 - issn
 
-**Extending with Custom Rules:**
+**Extending with Custom Rules**
+
 To add a custom rule, use the `addRule` method. For example, to validate license plates:
+
 ```php
 $vld->addRule('license-plate', function ($value) {
     return preg_match('/^[A-Z]{1,3}-[0-9]{1,4}$/', $value);
