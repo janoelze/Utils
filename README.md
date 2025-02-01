@@ -391,6 +391,14 @@ $lg->log('A simple log message');
 // Arguments are concatenated and arrays/objects are pretty-printed.
 $lg->warn('Retried', 3, 'times');
 $lg->error('An error occurred:', $error);
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/2Tlj3Sa.png" />
+  <br>
+</p>
 ```
 
 ### AI Class
