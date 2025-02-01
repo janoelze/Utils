@@ -10,11 +10,14 @@ A PHP library for quick and dirty, single-file web development.
 
 ## Modules
 
-|  |  |  |
-|-------|-------------|--|
-| [RT](#rt-class) | [SQ](#sq-class) | [JBS](#jbs-class) |
-| [AI](#ai-class) | [CH](#ch-class) | [LG](#lg-class) |
-| [VLD](#vld-class) | [ENV](#env-class) |  |
+- **RT**: URL routing with support for different HTTP methods.
+- **SQ**: SQLite interface with magic schema handling.
+- **JBS**: Job scheduler to run tasks at specific intervals.
+- **AI**: LLM interface and prompt builder.
+- **CH**: File-based cache handler.
+- **LG**: Logger with colored output and file logging.
+- **VLD**: Validation library with built-in and custom rules.
+- **ENV**: Environment variable manager.
 
 ## Installation
 
