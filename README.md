@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <img width="245" src="https://i.imgur.com/19k2dv6.png" />
+  <img width="245" src="https://i.imgur.com/VHPgRxM.png" />
   <br>
 </p>
 
@@ -113,11 +113,11 @@ $data = $rt->run();
 </html>
 ```
 
-## Class Reference
+## Module Reference
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/gld2Dg7.png" />
+  <img width="130" src="https://i.imgur.com/o2rOr1z.png" />
   <br>
 </p>
 
@@ -165,7 +165,7 @@ echo $data['title'];
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/w1zi5mG.png" />
+  <img width="130" src="https://i.imgur.com/vBwMYVd.png" />
   <br>
 </p>
 
@@ -254,7 +254,7 @@ try {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/EBjA8wx.png" />
+  <img width="130" src="https://i.imgur.com/KZhvvcy.png" />
   <br>
 </p>
 
@@ -298,7 +298,7 @@ $jbs->runJob('fetch-news');
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/2Tlj3Sa.png" />
+  <img width="130" src="https://i.imgur.com/9pdP8Kl.png" />
   <br>
 </p>
 
@@ -391,7 +391,7 @@ if (!isset($res['error'])) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/UnFuWZR.png" />
+  <img width="130" src="https://i.imgur.com/q8js5rm.png" />
   <br>
 </p>
 
@@ -439,7 +439,7 @@ echo $ch->get('key2')['a'];
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/5yN8yUQ.png" />
+  <img width="130" src="https://i.imgur.com/gLu1DRe.png" />
   <br>
 </p>
 
@@ -496,7 +496,7 @@ $lg->error('An error occurred:', $error);
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/3HzBMx1.png" />
+  <img width="130" src="https://i.imgur.com/qmgRCZi.png" />
   <br>
 </p>
 
@@ -550,7 +550,7 @@ if ($vld->isValid('licensePlate', 'ABC-1234')) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/0sYXsy2.png" />
+  <img width="130" src="https://i.imgur.com/8kSj05L.png" />
   <br>
 </p>
 
@@ -585,7 +585,7 @@ $env->set('DEBUG', true);
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/CjOX89L.png" />
+  <img width="130" src="https://i.imgur.com/QdYWIb5.png" />
   <br>
 </p>
 
