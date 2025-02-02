@@ -19,6 +19,7 @@ A PHP library for quick and dirty, single-file web development.
 - [**VLD**](#vld-class): Validation library with built-in and custom rules.
 - [**ENV**](#env-class): Environment variable manager.
 - [**FS**](#fs-class): File system operations.
+- [**S3**](#s3-class): Amazon S3 integration.
 
 ## Installation
 
@@ -400,11 +401,13 @@ if (!isset($res['error'])) {
 `CH` is a cache handler that stores data in files.
 
 **Constructor:**
-- __construct(array $config)
+
+- \_\_construct(array $config)
   - Requires a 'dir' option for the cache directory.
   - Creates the cache directory if it does not exist.
 
 **Methods:**
+
 - `set(string $key, mixed $value, int|string $expiration)`:<br>
   Stores a value with a specified expiration time (numeric seconds or human-readable string like "1d").
 - `get(string $key)`:<br>
@@ -646,4 +649,68 @@ $fs->remove('file.txt');
 
 // Read the content of a file.
 echo $fs->read('file.txt');
+```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/8hUJKmS.png" />
+  <br>
+</p>
+
+### S3 Class
+
+S3 is a simple class for working with Amazon S3 buckets.
+
+#### Key Methods
+
+- `__construct(array $config)`:<br>
+  Initializes the S3 instance with configuration options including bucket name, region, access key, and secret key.
+- `upload(string $sourceFile, string $targetName)`:<br>
+  Uploads a local file to the S3 bucket.
+- `download(string $sourceName, string $destinationFile)`:<br>
+  Downloads a file from the S3 bucket to a local destination.
+- `read(string $targetName)`:<br>
+  Reads and returns the contents of a file from the bucket.
+- `remove(string $targetName)`:<br>
+  Deletes a file from the bucket.
+- `listFiles(string $pattern = null)`:<br>
+  Retrieves a list of file keys in the bucket, optionally filtering with a glob pattern.
+- `getUrl(string $targetName)`:<br>
+  Returns the public URL for the specified file.
+
+```php
+use JanOelze\Utils\S3;
+use JanOelze\Utils\ENV;
+
+$env = new ENV(__DIR__ . '/.env');
+
+// Initialize the S3 instance.
+$s3 = new S3([
+  'bucket'     => $env->get('AWS_BUCKET'),
+  'region'     => $env->get('AWS_REGION'),
+  'access_key' => $env->get('AWS_ACCESS_KEY_ID'),
+  'secret_key' => $env->get('AWS_SECRET_ACCESS_KEY')
+]);
+
+// Upload a file
+$s3->upload('/tmp/diagnostics.log', 'logs/diagnostics.log');
+
+// List all log files
+foreach ($s3->listFiles('logs/*.log') as $file) {
+  echo $file . "\n";
+}
+
+// Download a file
+$s3->download('logs/diagnostics.log', '/tmp/diagnostics.log');
+
+// Read a file
+echo $s3->read('logs/diagnostics.log');
+
+// Remove a file
+$s3->remove('logs/diagnostics.log');
+
+// Get the public URL for a file
+echo $s3->getUrl('logs/diagnostics.log');
 ```
