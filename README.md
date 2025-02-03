@@ -10,16 +10,17 @@ A PHP library for quick and dirty, single-file web development.
 
 ## Modules
 
-- [**RT**](#rt-class): URL routing with support for different HTTP methods.
-- [**SQ**](#sq-class): SQLite interface with magic schema handling.
-- [**JBS**](#jbs-class): Job scheduler to run tasks at specific intervals.
-- [**AI**](#ai-class): LLM interface and prompt builder.
-- [**CH**](#ch-class): File-based cache handler.
-- [**LG**](#lg-class): Logger with colored output and file logging.
-- [**VLD**](#vld-class): Validation library with built-in and custom rules.
-- [**ENV**](#env-class): Environment variable manager.
-- [**FS**](#fs-class): File system operations.
-- [**S3**](#s3-class): Amazon S3 integration.
+- [**RT**](#rt-class): URL routing with support for different HTTP methods
+- [**SQ**](#sq-class): SQLite interface with magic schema handling
+- [**JBS**](#jbs-class): Job scheduler to run tasks at specific intervals
+- [**AI**](#ai-class): LLM interface and prompt builder
+- [**CH**](#ch-class): File-based cache handler
+- [**LG**](#lg-class): Logger with colored output and file logging
+- [**VLD**](#vld-class): Validation library with built-in and custom rules
+- [**ENV**](#env-class): Get/Set environment variables
+- [**FS**](#fs-class): Interact with the file system
+- [**S3**](#s3-class): Interact with Amazon S3
+- [**CON**](#con-class): Interact with remote servers
 
 ## Installation
 
