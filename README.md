@@ -723,3 +723,62 @@ $s3->remove('logs/diagnostics.log');
 // Get the public URL for a file
 echo $s3->getUrl('logs/diagnostics.log');
 ```
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/heGiGIX.png" />
+  <br>
+</p>
+
+### CON Class
+
+`CON` is a simple SSH and SFTP wrapper that facilitates executing remote commands and transferring files.
+
+- `__construct(array $options)`:<br>
+  Establishes an SSH connection using options such as host, port, username, password or key. Throws an exception if the connection or authentication fails.
+
+- `exec(string $command)`:<br>
+  Executes a remote command and returns an associative array with keys: `stdout`, `stderr`, and `exit_code`.
+
+- `download(string $remoteFile, string $localFile)`:<br>
+  Uses SCP to download a file from the remote server.
+
+- `upload(string $local, string $remote)`:<br>
+  Uploads a local file or directory (recursively) to the remote server. Returns status based on success or failure.
+
+- `close()`:<br>
+  Closes the SSH session by sending an "exit" command and clearing connection resources.
+
+```php
+use JanOelze\Utils\CON;
+
+$con = new CON([
+  'host'     => 'example.com',
+  'port'     => 22,
+  'username' => 'user',
+  'password' => 'password'
+]);
+
+// Execute a remote command
+$res = $con->exec('ls -la');
+
+// Check for errors
+if ($res['exit_code'] !== 0) {
+  $lg->error('Error: ' . $res['stderr']);
+  exit;
+}
+
+// Output the result
+echo $res['stdout'];
+
+// Download a file
+$con->download('/remote/file.txt', '/local/file.txt');
+
+// Upload a file
+$con->upload('/local/file.txt', '/remote/file.txt');
+
+// Close the connection
+$con->close();
+```
