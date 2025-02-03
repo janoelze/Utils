@@ -114,4 +114,30 @@ class FSTest extends TestCase
     // Clean up the copied file.
     unlink($destination);
   }
+
+  public function testZipDirectory(): void
+  {
+    // Create a test directory with a file
+    $zipDir = sys_get_temp_dir() . '/test_zip_dir';
+    $zipFile = sys_get_temp_dir() . '/test_archive.zip';
+    if (!is_dir($zipDir)) {
+      mkdir($zipDir, 0777, true);
+    }
+    file_put_contents($zipDir . '/file.txt', 'Zip content');
+
+    // Zip the directory
+    $this->assertTrue($this->fs->zip($zipDir, $zipFile));
+    $this->assertFileExists($zipFile);
+
+    // Verify the zip file contains the file
+    $zip = new \ZipArchive();
+    $res = $zip->open($zipFile);
+    $this->assertTrue($res === true);
+    $this->assertNotFalse($zip->locateName('file.txt'));
+    $zip->close();
+
+    // Cleanup
+    unlink($zipFile);
+    $this->deleteDirectory($zipDir);
+  }
 }

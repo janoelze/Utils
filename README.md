@@ -617,10 +617,14 @@ $env->set('DEBUG', true);
 - `read(string $path): string`:<br>
   Reads and returns the content of a file.
 
+- `zip(string $source, string $destination): bool`:<br>
+  Zips a directory into a zip file.
+
+## Example
+
 ```php
 use JanOelze\Utils\FS;
 
-// Initialize the FS instance.
 $fs = new FS();
 
 // List all PHP files in the current directory.
@@ -649,6 +653,11 @@ $fs->remove('file.txt');
 
 // Read the content of a file.
 echo $fs->read('file.txt');
+
+// Zip the directory '/path/to/dir' into 'archive.zip'
+if ($fs->zip('/path/to/dir', 'archive.zip')) {
+    echo "Directory zipped successfully!";
+}
 ```
 
 <hr>

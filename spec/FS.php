@@ -37,3 +37,27 @@ echo $fs->read('/tmp/hello.txt');
 
 // Remove the file
 $fs->remove('/tmp/hello.txt');
+
+// Example usage of zip()
+$fs = new \JanOelze\Utils\FS();
+$testDir = '/tmp/spec_zip_dir';
+$zipPath = '/tmp/spec_archive.zip';
+
+// Setup a directory with sample file
+if (!is_dir($testDir)) {
+    mkdir($testDir, 0777, true);
+}
+file_put_contents($testDir . '/sample.txt', 'Sample content');
+
+// Zip the directory
+$fs->zip($testDir, $zipPath);
+
+// Validate the zip file exists
+if (file_exists($zipPath)) {
+    echo "Zip created successfully.\n";
+}
+
+// Clean up
+unlink($zipPath);
+array_map('unlink', glob("$testDir/*.*"));
+rmdir($testDir);

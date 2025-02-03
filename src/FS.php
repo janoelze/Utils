@@ -198,4 +198,41 @@ class FS
     }
     return $content;
   }
+
+  /**
+   * Zip a directory into a zip file.
+   *
+   * @param string $source The source directory to zip.
+   * @param string $destination The destination zip file path.
+   * @return bool Returns true on success.
+   * @throws \RuntimeException If zipping fails.
+   */
+  public function zip(string $source, string $destination): bool
+  {
+    if (!is_dir($source)) {
+      throw new \RuntimeException("Source $source is not a directory");
+    }
+    $zip = new \ZipArchive();
+    if ($zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+      throw new \RuntimeException("Could not open <$destination> for zipping");
+    }
+    $source = realpath($source);
+    $files = new \RecursiveIteratorIterator(
+      new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+      \RecursiveIteratorIterator::SELF_FIRST
+    );
+    foreach ($files as $file) {
+      $filePath = $file->getRealPath();
+      $relativePath = substr($filePath, strlen($source) + 1);
+      if ($file->isDir()) {
+        $zip->addEmptyDir($relativePath);
+      } else {
+        if (!$zip->addFile($filePath, $relativePath)) {
+          throw new \RuntimeException("Could not add file: $filePath");
+        }
+      }
+    }
+    $zip->close();
+    return true;
+  }
 }
