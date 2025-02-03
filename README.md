@@ -767,7 +767,7 @@ $res = $con->exec('ls -la');
 
 // Check for errors
 if ($res['exit_code'] !== 0) {
-  $lg->error('Error: ' . $res['stderr']);
+  print_r($res['stderr']);
   exit;
 }
 
