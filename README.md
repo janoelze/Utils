@@ -797,11 +797,11 @@ $con->close();
 
 `THR` allows you to execute tasks in parallel using forking and socket-based IPC.
 
-- `__construct(array $config):`:<br>
+- `__construct(array $config)`:<br>
   Sets the maximum number of workers (default: 4).
-- `submit(callable $task, mixed $input):`:<br>
+- `submit(callable $task, mixed $input)`:<br>
   Forks a child process to execute a task.
-- `wait():`:<br>
+- `wait()`:<br>
   Waits for all tasks to finish and collects their results.
 
 ```php
