@@ -21,6 +21,7 @@ A PHP library for quick and dirty, single-file web development.
 - [**FS**](#fs-class): Interact with the file system
 - [**S3**](#s3-class): Interact with Amazon S3
 - [**CON**](#con-class): Interact with remote servers
+- [**THR**](#thr-class): Execute tasks in parallel
 
 ## Installation
 
@@ -783,3 +784,39 @@ $con->upload('/local/file.txt', '/remote/file.txt');
 // Close the connection
 $con->close();
 ```
+
+### THR Class
+
+`THR` allows you to execute tasks in parallel using forking and socket-based IPC.
+
+- `__construct(array $config):`:<br>
+  Sets the maximum number of workers (default: 4).
+- `submit(callable $task, mixed $input):`:<br>
+  Forks a child process to execute a task.
+- `wait():`:<br>
+  Waits for all tasks to finish and collects their results.
+
+#### Example Usage
+
+```php
+use JanOelze\Utils\THR;
+
+// Initialize the pool with a maximum of 3 workers.
+$pool = new THR(['max_workers' => 3]);
+
+// Define a task that takes an input and returns a result.
+$task = function ($input) {
+    sleep(1);
+    return $input * 2;
+};
+
+// Submit tasks to the pool.
+foreach (range(1, 5) as $i) {
+    $pool->submit($task, $i);
+}
+
+// Wait for all tasks to finish and collect the results.
+$results = $pool->wait();
+// => [2, 4, 6, 8, 10]
+```
+````
