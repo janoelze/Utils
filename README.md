@@ -785,6 +785,14 @@ $con->upload('/local/file.txt', '/remote/file.txt');
 $con->close();
 ```
 
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/prUEMJ0.png" />
+  <br>
+</p>
+
 ### THR Class
 
 `THR` allows you to execute tasks in parallel using forking and socket-based IPC.
@@ -795,8 +803,6 @@ $con->close();
   Forks a child process to execute a task.
 - `wait():`:<br>
   Waits for all tasks to finish and collects their results.
-
-#### Example Usage
 
 ```php
 use JanOelze\Utils\THR;
@@ -819,4 +825,3 @@ foreach (range(1, 5) as $i) {
 $results = $pool->wait();
 // => [2, 4, 6, 8, 10]
 ```
-````
