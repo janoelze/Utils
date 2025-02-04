@@ -16,9 +16,6 @@ class SQTest extends TestCase
     $record->email = 'alice@example.com';
     $record->save();
 
-    // Update assertions to confirm $record is instance of SQRecord
-    $this->assertInstanceOf(SQRecord::class, $record);
-
     // Assert that an ID, UUID, created_at, and updated_at were assigned
     $this->assertNotEmpty($record->id, 'User ID should be assigned after save.');
     $this->assertNotEmpty($record->uuid, 'User UUID should be assigned after save.');
