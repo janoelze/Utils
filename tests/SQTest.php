@@ -10,17 +10,20 @@ class SQTest extends TestCase
     // We use an in-memory SQLite DB for testing (will be recreated fresh each time).
     $sq = new SQ(['db' => ':memory:']);
 
-    // 1) Create a 'user' bean and save it
-    $user = $sq->dispense('user');
-    $user->name  = 'Alice';
-    $user->email = 'alice@example.com';
-    $user->save();
+    // 1) Create a 'user' record and save it
+    $record = $sq->dispense('user');
+    $record->name  = 'Alice';
+    $record->email = 'alice@example.com';
+    $record->save();
+
+    // Update assertions to confirm $record is instance of SQRecord
+    $this->assertInstanceOf(SQRecord::class, $record);
 
     // Assert that an ID, UUID, created_at, and updated_at were assigned
-    $this->assertNotEmpty($user->id, 'User ID should be assigned after save.');
-    $this->assertNotEmpty($user->uuid, 'User UUID should be assigned after save.');
-    $this->assertNotEmpty($user->created_at, 'User created_at should be set.');
-    $this->assertNotEmpty($user->updated_at, 'User updated_at should be set.');
+    $this->assertNotEmpty($record->id, 'User ID should be assigned after save.');
+    $this->assertNotEmpty($record->uuid, 'User UUID should be assigned after save.');
+    $this->assertNotEmpty($record->created_at, 'User created_at should be set.');
+    $this->assertNotEmpty($record->updated_at, 'User updated_at should be set.');
 
     // 2) Fetch the user from DB by criteria
     $foundUsers = $sq->find('user', ['name' => 'Alice']);
@@ -37,7 +40,7 @@ class SQTest extends TestCase
     $this->assertEquals('alice_new@example.com', $updatedUser->email, 'User email should be updated.');
     $this->assertNotEmpty($updatedUser->updated_at, 'User updated_at should be updated.');
 
-    // 5) Create a 'post' bean linked to the user
+    // 5) Create a 'post' record linked to the user
     $post = $sq->dispense('post');
     $post->title   = 'My First Post';
     $post->content = 'Hello from my first post!';

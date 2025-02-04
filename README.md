@@ -41,7 +41,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use JanOelze\Utils\RT;
 use JanOelze\Utils\SQ;
 
-$sq = new SQ('./db.sqlite');
+$sq = new SQ([
+  'db' => __DIR__ . '/todo.sqlite',
+]);
+
 $rt = new RT([
   'base_url'    => 'http://localhost:8001',
   'page_param'  => 'action',
@@ -180,24 +183,24 @@ creates tables, manages columns, and provides simple CRUD operations.
 #### Key Methods
 
 - `__construct(string $path):`:<br>Initializes the SQLite connection with the specified file.
-- `dispense(string $type):`:<br>Returns a new SQBean instance for the given table type.
-- `find(string $type, array $criteria = []):`:<br>Retrieves records matching criteria; returns an array of SQBean objects.
+- `dispense(string $type):`:<br>Returns a new SQRecord instance for the given table type.
+- `find(string $type, array $criteria = []):`:<br>Retrieves records matching criteria; returns an array of SQRecord objects.
 - `findOne(string $type, array $criteria = []):`:<br>Retrieves the first matching record.
 - `execute(string $sql, array $params = []):`:<br>Executes a raw SQL statement.
 - `query(string $table):`:<br>Returns a query builder for constructing custom queries.
 - `beginTransaction(), commit(), rollBack():`:<br>Manage transactions.
 - `getPDO():`:<br>Returns the underlying PDO instance.
-- `ensureTableExists(string $table, SQBean $bean):`:<br>Ensures the table exists (creates it if needed) and caches its schema.
+- `ensureTableExists(string $table, SQRecord $record):`:<br>Ensures the table exists (creates it if needed) and caches its schema.
 - `addColumn(string $table, string $column, string $type):`:<br>Adds a new column to an existing table.
 - `getTableSchema(string $table):`:<br>Returns the cached schema for the table.
 
 #### How SQ Works
 
-When you save a record using an SQBean instance:
+When you save a record using an SQRecord instance:
 
 1. SQ verifies if the table exists; if not, it creates one.
-2. It inspects the fields of the SQBean and automatically adds any missing columns, inferring the data type (INTEGER, REAL, TEXT).
-3. Depending on whether the bean is new, SQ either inserts a new record or updates an existing one.
+2. It inspects the fields of the SQRecord and automatically adds any missing columns, inferring the data type (INTEGER, REAL, TEXT).
+3. Depending on whether the record is new, SQ either inserts a new record or updates an existing one.
 
 #### Examples
 

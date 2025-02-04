@@ -25,9 +25,9 @@ class SQ
     $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 
-  public function dispense(string $type): SQBean
+  public function dispense(string $type): SQRecord
   {
-    return new SQBean($this, $type);
+    return new SQRecord($this, $type);
   }
 
   public function find(string $type, array $criteria = []): array
@@ -58,7 +58,7 @@ class SQ
     $rows  = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $beans = [];
     foreach ($rows as $row) {
-      $bean = new SQBean($this, $type);
+      $bean = new SQRecord($this, $type);
       foreach ($row as $k => $v) {
         $bean->$k = $v;
       }
@@ -68,7 +68,7 @@ class SQ
     return $beans;
   }
 
-  public function findOne(string $type, array $criteria = []): ?SQBean
+  public function findOne(string $type, array $criteria = []): ?SQRecord
   {
     $result = $this->find($type, $criteria);
     return !empty($result) ? $result[0] : null;
@@ -106,7 +106,7 @@ class SQ
     return $this->pdo;
   }
 
-  public function ensureTableExists(string $table, SQBean $bean)
+  public function ensureTableExists(string $table, SQRecord $bean)
   {
     if (isset($this->schemaCache[$table])) {
       return;
@@ -152,7 +152,7 @@ class SQ
   }
 }
 
-class SQBean
+class SQRecord
 {
   private $orm;
   private $table;
@@ -374,7 +374,7 @@ class SQQueryBuilder
 
     $beans = [];
     foreach ($rows as $row) {
-      $bean = new SQBean($this->orm, $this->table);
+      $bean = new SQRecord($this->orm, $this->table);
       foreach ($row as $k => $v) {
         $bean->$k = $v;
       }
