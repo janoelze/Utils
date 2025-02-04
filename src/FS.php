@@ -235,4 +235,57 @@ class FS
     $zip->close();
     return true;
   }
+
+  /**
+   * Read file/directory information.
+   *
+   * @param string $path The file or directory path.
+   * @return array An associative array containing file metadata.
+   * @throws \RuntimeException If the path does not exist.
+   */
+  public function info(string $path): array
+  {
+    if (!file_exists($path)) {
+      throw new \RuntimeException("Path $path does not exist.");
+    }
+    $info = pathinfo($path);
+    if (is_file($path)) {
+      return [
+        'path'          => $path,
+        'type'          => 'file',
+        'size'          => filesize($path),
+        'human_size'    => $this->humanReadableSize(filesize($path)),
+        'extension'     => $info['extension'] ?? '',
+        'mime'          => @mime_content_type($path),
+        'basename'      => $info['basename'] ?? '',
+        'last_modified' => filemtime($path),
+      ];
+    } elseif (is_dir($path)) {
+      return [
+        'path'          => $path,
+        'type'          => 'directory',
+        'basename'      => $info['basename'] ?? '',
+        'realpath'      => realpath($path) ?: $path,
+        'last_modified' => filemtime($path),
+      ];
+    }
+    throw new \RuntimeException("Path $path is neither a file nor a directory.");
+  }
+
+  /**
+   * Convert bytes to a human readable format.
+   *
+   * @param int $bytes
+   * @param int $precision
+   * @return string
+   */
+  protected function humanReadableSize(int $bytes, int $precision = 2): string
+  {
+    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    $bytes = max($bytes, 0);
+    $pow = $bytes > 0 ? floor(log($bytes) / log(1024)) : 0;
+    $pow = min($pow, count($units) - 1);
+    $bytes /= (1024 ** $pow);
+    return round($bytes, $precision) . ' ' . $units[$pow];
+  }
 }

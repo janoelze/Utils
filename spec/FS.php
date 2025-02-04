@@ -35,6 +35,28 @@ $fs->append('/tmp/hello.txt', ' Goodbye, world!');
 // Read and output the file content
 echo $fs->read('/tmp/hello.txt');
 
+// Read and output the file content
+echo $fs->info('/tmp/hello.txt');
+// => [
+//    'path' => '/tmp/hello.txt',
+//    'size' => 26,
+//    'extension' => 'txt',
+//    'mime' => 'text/plain',
+//    'type' => 'file',
+//    'basename' => 'hello.txt',
+//    'filename' => 'hello',
+//    'dirname' => '/tmp',
+//    'realpath' => '/tmp/hello.txt',
+//    'last_accessed' => 1612345678,
+//    'last_modified' => 1612345678,
+//    'created' => 1612345678,
+//    'is_file' => true,
+//    'is_dir' => false,
+//    'is_readable' => true,
+//    'is_writable' => true,
+//    'is_executable' => false,
+//  ]
+
 // Remove the file
 $fs->remove('/tmp/hello.txt');
 
