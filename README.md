@@ -626,22 +626,7 @@ $env->set('DEBUG', true);
   Zips a directory into a zip file.
 
 - `info(string $path): array`:<br>
-  Returns an associative array containing file metadata.  
-  For a file, the returned keys include:
-  - `path` – full path
-  - `type` – always `"file"`
-  - `size` – file size in bytes
-  - `human_size` – file size in a human-readable format
-  - `extension` – file extension (if any)
-  - `mime` – MIME type
-  - `basename` – filename with extension
-  - `last_modified` – last modification timestamp  
-  For a directory, the keys are:
-  - `path` – full path
-  - `type` – always `"directory"`
-  - `basename` – directory name
-  - `realpath` – canonicalized absolute pathname
-  - `last_modified` – last modification timestamp
+  Returns an associative array containing file metadata (path, type, size, human_size, extension, mime, basename, last_modified, path, type, basename, realpath, last_modified).
 
 ## Example
 
