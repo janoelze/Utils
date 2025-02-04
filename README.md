@@ -666,6 +666,10 @@ echo $fs->read('file.txt');
 if ($fs->zip('/path/to/dir', 'archive.zip')) {
     echo "Directory zipped successfully!";
 }
+
+// Get information about a file.
+$info = $fs->info('file.txt');
+print_r($info);
 ```
 
 <hr>
