@@ -206,7 +206,7 @@ Creating and saving a record:
 ```php
 use JanOelze\Utils\SQ;
 
-$sq = new SQ('./my_database.sqlite');
+$sq = new SQ(['db' => './my_database.sqlite']);  // Changed initialization
 $user = $sq->dispense('user');
 $user->name  = 'Alice';
 $user->email = 'alice@example.com';

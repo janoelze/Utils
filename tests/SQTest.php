@@ -8,7 +8,7 @@ class SQTest extends TestCase
   public function testBasic()
   {
     // We use an in-memory SQLite DB for testing (will be recreated fresh each time).
-    $sq = new SQ(':memory:');
+    $sq = new SQ(['db' => ':memory:']);
 
     // 1) Create a 'user' bean and save it
     $user = $sq->dispense('user');

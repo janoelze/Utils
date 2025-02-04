@@ -9,8 +9,17 @@ class SQ
   private $pdo;
   private $schemaCache = [];
 
-  public function __construct(string $path)
+  // Modified constructor to accept a config array or string
+  public function __construct($config)
   {
+    if (is_array($config)) {
+      $path = $config['db'] ?? null;
+      if (!$path) {
+        throw new \InvalidArgumentException("Database path required in config with key 'db'.");
+      }
+    } else {
+      $path = $config;
+    }
     $dsn = "sqlite:" . $path;
     $this->pdo = new PDO($dsn);
     $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -377,7 +386,7 @@ class SQQueryBuilder
 }
 
 if (basename(__FILE__) === basename($_SERVER["SCRIPT_FILENAME"])) {
-  $sq = new SQ('demo.sqlite');
+  $sq = new SQ(['db' => 'demo.sqlite']);
 
   $user = $sq->dispense('user');
   $user->name  = 'Alice';
