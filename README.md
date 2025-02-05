@@ -626,7 +626,7 @@ $env->set('DEBUG', true);
   Zips a directory into a zip file.
 
 - `info(string $path): array`:<br>
-  Returns an associative array containing file metadata (path, type, size, human_size, extension, mime, basename, last_modified, path, type, basename, realpath, last_modified).
+  Returns rich information about a file.
 
 ## Example
 
@@ -666,10 +666,42 @@ echo $fs->read('file.txt');
 if ($fs->zip('/path/to/dir', 'archive.zip')) {
     echo "Directory zipped successfully!";
 }
+```
 
-// Get information about a file.
-$info = $fs->info('file.txt');
-print_r($info);
+```php
+use JanOelze\Utils\FS;
+
+$fs = new FS();
+
+// Get rich information about a file.
+$info = $fs->info('/tmp/hello.txt');
+
+// => Array (
+//     [path] => /tmp/hello.txt
+//     [basename] => hello.txt
+//     [exists] => 1
+//     [realpath] => /private/tmp/hello.txt
+//     [filename] => hello
+//     [extension] => txt
+//     [type] => file
+//     [size] => 13
+//     [inode] => 141667381
+//     [device] => 16777234
+//     [link_count] => 1
+//     [block_size] => 4096
+//     [blocks] => 8
+//     [atime] => 1738757881
+//     [mtime] => 1738758051
+//     [ctime] => 1738758051
+//     [creation_time] => 
+//     [permissions] => 33188
+//     [owner] => janoelze
+//     [group] => wheel
+//     [readable] => 1
+//     [writable] => 1 
+//     [mime_type] => text/plain
+//     [hash_sha256] => 315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3
+// )
 ```
 
 <hr>

@@ -148,17 +148,14 @@ class FSTest extends TestCase
     $this->fs->write($this->testFile, $content);
     $info = $this->fs->info($this->testFile);
     $this->assertEquals('file', $info['type']);
-    $this->assertArrayHasKey('human_size', $info);
-    $this->assertArrayHasKey('last_modified', $info);
     $this->assertArrayHasKey('extension', $info);
     $this->assertEquals(basename($this->testFile), $info['basename']);
 
     // Test info() for a directory
     $this->fs->createDirectory($this->testDir);
     $dirInfo = $this->fs->info($this->testDir);
-    $this->assertEquals('directory', $dirInfo['type']);
+    $this->assertEquals('dir', $dirInfo['type']);
     $this->assertArrayHasKey('realpath', $dirInfo);
-    $this->assertArrayHasKey('last_modified', $dirInfo);
     $this->assertEquals(basename($this->testDir), $dirInfo['basename']);
   }
 }

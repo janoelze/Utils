@@ -237,55 +237,131 @@ class FS
   }
 
   /**
-   * Read file/directory information.
+   * Inspects the provided path and returns detailed metadata as an associative array.
    *
-   * @param string $path The file or directory path.
-   * @return array An associative array containing file metadata.
-   * @throws \RuntimeException If the path does not exist.
+   * @param string $path The file system path to inspect.
+   * @return array An associative array containing metadata.
+   * @throws Exception If the provided path is empty.
    */
   public function info(string $path): array
   {
-    if (!file_exists($path)) {
-      throw new \RuntimeException("Path $path does not exist.");
+    if (empty($path)) {
+      throw new Exception("Path cannot be empty.");
     }
-    $info = pathinfo($path);
+
+    // Begin with the original provided path and its basename.
+    $result = [
+      'path'     => $path,
+      'basename' => basename($path)
+    ];
+
+    // Existence check
+    $result['exists'] = file_exists($path);
+    if (!$result['exists']) {
+      $result['error'] = "The path does not exist.";
+      return $result;
+    }
+
+    // Add the realpath.
+    $result['realpath'] = realpath($path);
+
+    // If it's a file, also add filename (without extension) and extension.
     if (is_file($path)) {
-      return [
-        'path'          => $path,
-        'type'          => 'file',
-        'size'          => filesize($path),
-        'human_size'    => $this->humanReadableSize(filesize($path)),
-        'extension'     => $info['extension'] ?? '',
-        'mime'          => @mime_content_type($path),
-        'basename'      => $info['basename'] ?? '',
-        'last_modified' => filemtime($path),
-      ];
-    } elseif (is_dir($path)) {
-      return [
-        'path'          => $path,
-        'type'          => 'directory',
-        'basename'      => $info['basename'] ?? '',
-        'realpath'      => realpath($path) ?: $path,
-        'last_modified' => filemtime($path),
-      ];
+      $result['filename']  = pathinfo($path, PATHINFO_FILENAME);
+      $result['extension'] = pathinfo($path, PATHINFO_EXTENSION);
     }
-    throw new \RuntimeException("Path $path is neither a file nor a directory.");
+
+    // Basic type info
+    $result['type'] = filetype($path);
+
+    // Filesystem statistics
+    $stat = stat($path);
+    $result['size']       = is_file($path) ? filesize($path) : 0;
+    $result['inode']      = $stat['ino'];
+    $result['device']     = $stat['dev'];
+    $result['link_count'] = $stat['nlink'];
+    $result['block_size'] = isset($stat['blksize']) ? $stat['blksize'] : null;
+    $result['blocks']     = isset($stat['blocks']) ? $stat['blocks'] : null;
+
+    // Timestamps
+    $result['atime']         = $stat['atime'];
+    $result['mtime']         = $stat['mtime'];
+    $result['ctime']         = $stat['ctime'];
+    $result['creation_time'] = isset($stat['birthtime']) ? $stat['birthtime'] : null;
+
+    // Permissions and ownership
+    $result['permissions'] = fileperms($path);
+    // Using POSIX functions if available for owner and group names.
+    $ownerData = function_exists('posix_getpwuid') ? posix_getpwuid($stat['uid']) : null;
+    $groupData = function_exists('posix_getgrgid') ? posix_getgrgid($stat['gid']) : null;
+    $result['owner'] = $ownerData['name'] ?? $stat['uid'];
+    $result['group'] = $groupData['name'] ?? $stat['gid'];
+
+    // Read, write, execute flags as booleans.
+    $result['readable']   = is_readable($path);
+    $result['writable']   = is_writable($path);
+    $result['executable'] = is_executable($path);
+
+    // MIME type (for files)
+    if (is_file($path)) {
+      if (function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime  = finfo_file($finfo, $path);
+        finfo_close($finfo);
+        $result['mime_type'] = $mime;
+      } elseif (function_exists('mime_content_type')) {
+        $result['mime_type'] = mime_content_type($path);
+      } else {
+        $result['mime_type'] = null;
+      }
+    } else {
+      $result['mime_type'] = null;
+    }
+
+    // Symlink-specific information
+    if (is_link($path)) {
+      $result['symlink_target'] = readlink($path);
+      // To check if a symlink is broken, resolve the target relative to the current directory.
+      $targetPath = $result['symlink_target'];
+      if ($targetPath && !file_exists($targetPath)) {
+        // Try to resolve relative path based on the directory of the symlink.
+        $targetPath = realpath(dirname($path) . DIRECTORY_SEPARATOR . $result['symlink_target']);
+      }
+      $result['is_broken_symlink'] = !file_exists($targetPath);
+    }
+
+    // Directory-specific information
+    if (is_dir($path)) {
+      // List the directory contents (excluding '.' and '..')
+      $contents = scandir($path);
+      $filtered = array_values(array_diff($contents, ['.', '..']));
+      $result['contents']   = $filtered;
+      $result['item_count'] = count($filtered);
+    }
+
+    // Optional: File checksum/hashing (only for files)
+    if (is_file($path)) {
+      // Example: SHA-256 hash of the file
+      $result['hash_sha256'] = hash_file('sha256', $path);
+    }
+
+    return $result;
   }
 
-  /**
-   * Convert bytes to a human readable format.
-   *
-   * @param int $bytes
-   * @param int $precision
-   * @return string
-   */
-  protected function humanReadableSize(int $bytes, int $precision = 2): string
-  {
-    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-    $bytes = max($bytes, 0);
-    $pow = $bytes > 0 ? floor(log($bytes) / log(1024)) : 0;
-    $pow = min($pow, count($units) - 1);
-    $bytes /= (1024 ** $pow);
-    return round($bytes, $precision) . ' ' . $units[$pow];
-  }
+  // /**
+  //  * Convert bytes to a human readable format.
+  //  *
+  //  * @param int $bytes
+  //  * @param int $precision
+  //  * @return string
+  //  */
+  // protected function humanReadableSize(int $bytes, int $precision = 2): string
+  // {
+  //   $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  //   $bytes = max($bytes, 0);
+  //   $pow = $bytes > 0 ? floor(log($bytes) / log(1024)) : 0;
+  //   $pow = min($pow, count($units) - 1);
+  //   $bytes /= (1024 ** $pow);
+  //   return round($bytes, $precision) . ' ' . $units[$pow];
+  // }
 }
