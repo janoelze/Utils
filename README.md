@@ -896,8 +896,8 @@ $gr = new GR();
 
 $gr->plot([
   'title'     => 'Sales Report 2023',
-  'type'      => 'line',         // Change to 'bar' for a bar chart.
-  'smoothing' => 0.1,            // Smoothing factor for line curves.
+  'type'      => 'line', 
+  'smoothing' => 0.1,
   'style'     => [
     'container' => [
       'width'         => 1000,
@@ -955,71 +955,4 @@ $gr->plot([
 echo $gr->output();
 ```
 
-![Line Chart](static/line-chart.svg)
-
-### Bar Chart
-
-```php
-use JanOelze\Utils\GR;
-
-$gr = new GR();
-
-$gr->plot([
-  'title'     => 'Sales Report 2023',
-  'type'      => 'bar',
-  'style'     => [
-    'container' => [
-      'width'         => 1000,
-      'height'        => 600,
-      'padding-top'   => 50,
-      'padding-right' => 50,
-      'padding-bottom'=> 50,
-      'padding-left'  => 50,
-    ],
-    'axis' => [
-      'stroke'       => 'gray',
-      'stroke-width' => 2,
-    ],
-    'x-grid' => [
-      'stroke'       => '#e0e0e0',
-      'stroke-width' => 1,
-    ],
-    'y-grid' => [
-      'stroke'       => '#e0e0e0',
-      'stroke-width' => 1,
-    ],
-    'bar' => [
-      'fill'         => 'blue',
-    ],
-  ],
-  'datasets' => [
-    [
-      'title'  => 'Product A',
-      'color'  => 'red',
-      'values' => [
-        [0, 10],
-        [1, 15],
-        [2, 20],
-        [3, 25],
-      ],
-    ],
-    [
-      'title'  => 'Product B',
-      'style'  => [
-        'fill'         => 'green',
-      ],
-      'values' => [
-        [0, 8],
-        [1, 12],
-        [2, 18],
-        [3, 22],
-      ],
-    ],
-  ],
-]);
-
-// Output the generated SVG.
-$gr->save('./chart.svg');
-```
-
-![Bar Chart](static/bar-chart.svg)
+Bar charts are WIP
