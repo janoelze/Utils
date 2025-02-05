@@ -946,7 +946,7 @@ $gr->plot([
 echo $gr->output();
 ```
 
-## Bar Chart
+### Bar Chart
 
 ```php
 use JanOelze\Utils\GR;
