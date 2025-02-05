@@ -51,7 +51,6 @@ abstract class ChartType
  */
 class LineChart extends ChartType
 {
-
   /**
    * Optionally smooth curves if a smoothing factor is provided.
    *
@@ -93,11 +92,17 @@ class LineChart extends ChartType
     $plotWidth  = $this->dimensions['width'] - $this->dimensions['paddingLeft'] - $this->dimensions['paddingRight'];
     $plotHeight = $this->dimensions['height'] - $this->dimensions['paddingTop'] - $this->dimensions['paddingBottom'];
 
-    // Global default style.
-    $globalLineStyle = $this->config['style']['line'] ?? [];
-    $globalStroke = $globalLineStyle['stroke'] ?? 'black';
-    $globalStrokeWidth = $globalLineStyle['stroke-width'] ?? 1;
-    $smoothing = isset($this->config['smoothing']) ? floatval($this->config['smoothing']) : 0;
+    // Global default style for a simple sparkline.
+    $globalStroke = 'black';
+    $globalStrokeWidth = 1;
+    $smoothing = 0.0;
+    if (isset($this->config['style']['line']) && is_array($this->config['style']['line'])) {
+      $globalStroke = $this->config['style']['line']['stroke'] ?? $globalStroke;
+      $globalStrokeWidth = $this->config['style']['line']['stroke-width'] ?? $globalStrokeWidth;
+    }
+    if (isset($this->config['smoothing'])) {
+      $smoothing = floatval($this->config['smoothing']);
+    }
 
     // Process each dataset.
     foreach ($this->config['datasets'] as $dataset) {
@@ -147,7 +152,6 @@ class LineChart extends ChartType
  */
 class BarChart extends ChartType
 {
-
   /**
    * Render the bar chart as SVG.
    *
@@ -185,7 +189,7 @@ class BarChart extends ChartType
     // Process each dataset. For grouped bar charts, we show bars side-by-side per category.
     $numDatasets = count($this->config['datasets']);
     foreach ($this->config['datasets'] as $dIndex => $dataset) {
-      // Allow dataset-specific style overrides.
+      // Default bar color for sparklines.
       $barColor = 'black';
       if (isset($dataset['color'])) {
         $barColor = $dataset['color'];
@@ -193,7 +197,7 @@ class BarChart extends ChartType
       if (isset($dataset['style']) && is_array($dataset['style']) && isset($dataset['style']['stroke'])) {
         $barColor = $dataset['style']['stroke'];
       }
-      // Default bar stroke width (or fill, for bars we use fill color).
+      // Default bar stroke width (for bars we use fill color).
       $barStrokeWidth = 0;
       if (isset($dataset['style']) && is_array($dataset['style']) && isset($dataset['style']['stroke-width'])) {
         $barStrokeWidth = $dataset['style']['stroke-width'];
@@ -307,14 +311,24 @@ class GR
    */
   private function buildSVG()
   {
-    // Container configuration.
-    $container = $this->config['style']['container'] ?? [];
-    $width  = $container['width'] ?? 800;
-    $height = $container['height'] ?? 600;
-    $paddingTop    = $container['padding-top'] ?? 50;
-    $paddingRight  = $container['padding-right'] ?? 50;
-    $paddingBottom = $container['padding-bottom'] ?? 50;
-    $paddingLeft   = $container['padding-left'] ?? 50;
+    // Set simple sparkline defaults.
+    $defaultContainer = [
+      'width'         => 100,
+      'height'        => 30,
+      'padding-top'   => 0,
+      'padding-right' => 0,
+      'padding-bottom' => 0,
+      'padding-left'  => 0,
+    ];
+    $containerConfig = $this->config['style']['container'] ?? [];
+    $container = array_merge($defaultContainer, $containerConfig);
+
+    $width  = $container['width'];
+    $height = $container['height'];
+    $paddingTop    = $container['padding-top'];
+    $paddingRight  = $container['padding-right'];
+    $paddingBottom = $container['padding-bottom'];
+    $paddingLeft   = $container['padding-left'];
     $dimensions = [
       'width'         => $width,
       'height'        => $height,
@@ -328,7 +342,7 @@ class GR
     $svg  = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . "\n";
     $svg .= '<svg width="' . $width . '" height="' . $height . '" xmlns="http://www.w3.org/2000/svg">' . "\n";
 
-    // Draw title.
+    // Draw title only if provided.
     if (!empty($this->config['title'])) {
       $titleX = $width / 2;
       $titleY = $paddingTop / 2;
@@ -362,10 +376,9 @@ class GR
     }
 
     /*
-         * --- Draw Grid Lines ---
+         * --- Draw Grid Lines (only if explicitly defined) ---
          */
-    // X-grid.
-    if (isset($this->config['style']['x-grid'])) {
+    if (!empty($this->config['style']['x-grid'])) {
       $xGridStyle = $this->config['style']['x-grid'];
       $gridXStroke = $xGridStyle['stroke'] ?? '#f0f0f0';
       $gridXStrokeWidth = $xGridStyle['stroke-width'] ?? 1;
@@ -378,8 +391,8 @@ class GR
           . '" stroke-width="' . $gridXStrokeWidth . '"/>' . "\n";
       }
     }
-    // Y-grid.
-    if (isset($this->config['style']['y-grid'])) {
+
+    if (!empty($this->config['style']['y-grid'])) {
       $yGridStyle = $this->config['style']['y-grid'];
       $gridYStroke = $yGridStyle['stroke'] ?? '#f0f0f0';
       $gridYStrokeWidth = $yGridStyle['stroke-width'] ?? 1;
@@ -393,17 +406,19 @@ class GR
     }
 
     /*
-         * --- Draw Axes ---
+         * --- Draw Axes (only if explicitly defined) ---
          */
-    $axisStyle = $this->config['style']['axis'] ?? [];
-    $axisStroke = $axisStyle['stroke'] ?? 'black';
-    $axisStrokeWidth = $axisStyle['stroke-width'] ?? 1;
-    // X-axis.
-    $svg .= '<line x1="' . $paddingLeft . '" y1="' . ($height - $paddingBottom) . '" x2="' . ($width - $paddingRight)
-      . '" y2="' . ($height - $paddingBottom) . '" stroke="' . $axisStroke . '" stroke-width="' . $axisStrokeWidth . '"/>' . "\n";
-    // Y-axis.
-    $svg .= '<line x1="' . $paddingLeft . '" y1="' . $paddingTop . '" x2="' . $paddingLeft . '" y2="' . ($height - $paddingBottom)
-      . '" stroke="' . $axisStroke . '" stroke-width="' . $axisStrokeWidth . '"/>' . "\n";
+    if (!empty($this->config['style']['axis'])) {
+      $axisStyle = $this->config['style']['axis'];
+      $axisStroke = $axisStyle['stroke'] ?? 'black';
+      $axisStrokeWidth = $axisStyle['stroke-width'] ?? 1;
+      // X-axis.
+      $svg .= '<line x1="' . $paddingLeft . '" y1="' . ($height - $paddingBottom) . '" x2="' . ($width - $paddingRight)
+        . '" y2="' . ($height - $paddingBottom) . '" stroke="' . $axisStroke . '" stroke-width="' . $axisStrokeWidth . '"/>' . "\n";
+      // Y-axis.
+      $svg .= '<line x1="' . $paddingLeft . '" y1="' . $paddingTop . '" x2="' . $paddingLeft . '" y2="' . ($height - $paddingBottom)
+        . '" stroke="' . $axisStroke . '" stroke-width="' . $axisStrokeWidth . '"/>' . "\n";
+    }
 
     /*
          * --- Render Chart Data ---

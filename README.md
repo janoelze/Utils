@@ -892,69 +892,34 @@ $results = $pool->wait();
 ```php
 use JanOelze\Utils\GR;
 
+use JanOelze\Utils\GR;
+
+// Initialize the GR library
 $gr = new GR();
 
+$data = [];
+
+for ($i = 0; $i < 100; $i++) {
+  $data[] = [$i, rand(0, 100)];
+}
+
+// Create a simple sparkline chart
 $gr->plot([
-  'title'     => 'Sales Report 2023',
-  'type'      => 'line', 
-  'smoothing' => 0.1,
-  'style'     => [
+  'type' => 'line',
+  'style' => [
     'container' => [
-      'width'         => 1000,
-      'height'        => 600,
-      'padding-top'   => 50,
-      'padding-right' => 50,
-      'padding-bottom'=> 50,
-      'padding-left'  => 50,
-    ],
-    'axis' => [
-      'stroke'       => 'gray',
-      'stroke-width' => 2,
-    ],
-    'x-grid' => [
-      'stroke'       => '#e0e0e0',
-      'stroke-width' => 1,
-    ],
-    'y-grid' => [
-      'stroke'       => '#e0e0e0',
-      'stroke-width' => 1,
-    ],
-    'line' => [
-      'stroke'       => 'blue',
-      'stroke-width' => 3,
+      'width' => 300,
+      'height' => 50,
     ],
   ],
   'datasets' => [
     [
-      'title'  => 'Product A',
-      'color'  => 'red',
-      'values' => [
-        [0, 10],
-        [1, 15],
-        [2, 20],
-        [3, 25],
-      ],
-    ],
-    [
-      'title'  => 'Product B',
-      'style'  => [
-        'stroke'       => 'green',
-        'stroke-width' => 2,
-      ],
-      'values' => [
-        [0, 8],
-        [1, 12],
-        [2, 18],
-        [3, 22],
-      ],
-    ],
+      'values' => $data
+    ]
   ],
 ]);
 
-// Output the generated SVG.
-echo $gr->output();
+// Save the generated SVG to a file
+$gr->save('./static/sparkline.svg');
 ```
-
-![Line Chart](static/line-chart.svg)
-
-Bar charts are WIP.
+![](static/sparkline.svg)
