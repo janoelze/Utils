@@ -448,6 +448,107 @@ echo $ch->get('key2')['a'];
 
 <p align="left">
   <br>
+  <img width="130" src="https://i.imgur.com/l1l6lIU.png" />
+  <br>
+</p>
+
+## GR Class
+
+`GR` creates SVG charts.
+
+### Methods
+
+- `plot(array $config)`:<br>Builds the SVG chart based on the provided configuration.
+- `output()`: <br>Returns the generated SVG as a string.
+- `save(string $filePath)`:<br>Saves the SVG output to the specified file.
+
+### Line Chart
+
+```php
+use JanOelze\Utils\GR;
+
+// Initialize the GR library
+$gr = new GR();
+
+$data = [];
+
+for ($i = 0; $i < 100; $i++) {
+  $data[] = [$i, rand(0, 100)];
+}
+
+// Create a simple sparkline chart
+$gr->plot([
+  'type' => 'line',
+  'animate' => 1000, // Animate the line drawing (in ms, optional)
+  'style' => [
+    'container' => [
+      'width' => 300,
+      'height' => 50,
+    ],
+  ],
+  'datasets' => [
+    [
+      'values' => $data
+    ]
+  ],
+]);
+
+// Save the generated SVG to a file
+$gr->save('./static/sparkline.svg');
+```
+
+### Resulting SVG
+
+![](static/sparkline.svg)
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/62mxt8c.png" />
+  <br>
+</p>
+
+## JS Class
+
+`JS` is a thread-safe (finger's crossed) JSON store. It provides simple methods to retrieve, modify, and clear JSON data.
+
+**Methods:**
+- `getAll(): array`:<br>Returns the entire data store.
+- `getKeys(): array`:<br>Returns all keys in the store.
+- `get(string $key)`:<br>Retrieves the value for a specific key.
+- `set(string $key, mixed $value): void`:<br>Sets or updates a key with a value.
+- `delete(string $key): void`:<br>Deletes a key from the store.
+- `clear(): void`:<br>Clears the entire store.
+
+```php
+use JanOelze\Utils\JS;
+
+$js = new JS('/path/to/store.json');
+
+// Set a value
+$js->set('name', 'John Doe');
+
+// Get a value
+echo $js->get('name');
+
+// Get all keys
+print_r($js->getKeys());
+
+// Get all data
+print_r($js->getAll());
+
+// Delete a key
+$js->delete('name');
+
+// Clear the store
+$js->clear();
+```
+
+<hr>
+
+<p align="left">
+  <br>
   <img width="130" src="https://i.imgur.com/gLu1DRe.png" />
   <br>
 </p>
@@ -867,105 +968,4 @@ foreach (range(1, 5) as $i) {
 // Wait for all tasks to finish and collect the results.
 $results = $pool->wait();
 // => [2, 4, 6, 8, 10]
-```
-
-<hr>
-
-<p align="left">
-  <br>
-  <img width="130" src="https://i.imgur.com/l1l6lIU.png" />
-  <br>
-</p>
-
-## GR Class
-
-`GR` creates SVG charts.
-
-### Methods
-
-- `plot(array $config)`:<br>Builds the SVG chart based on the provided configuration.
-- `output()`: <br>Returns the generated SVG as a string.
-- `save(string $filePath)`:<br>Saves the SVG output to the specified file.
-
-### Line Chart
-
-```php
-use JanOelze\Utils\GR;
-
-// Initialize the GR library
-$gr = new GR();
-
-$data = [];
-
-for ($i = 0; $i < 100; $i++) {
-  $data[] = [$i, rand(0, 100)];
-}
-
-// Create a simple sparkline chart
-$gr->plot([
-  'type' => 'line',
-  'animate' => 1000, // Animate the line drawing (in ms, optional)
-  'style' => [
-    'container' => [
-      'width' => 300,
-      'height' => 50,
-    ],
-  ],
-  'datasets' => [
-    [
-      'values' => $data
-    ]
-  ],
-]);
-
-// Save the generated SVG to a file
-$gr->save('./static/sparkline.svg');
-```
-
-### Resulting SVG
-
-![](static/sparkline.svg)
-
-<hr>
-
-<p align="left">
-  <br>
-  <img width="130" src="https://i.imgur.com/62mxt8c.png" />
-  <br>
-</p>
-
-## JS Class
-
-`JS` is a thread-safe (finger's crossed) JSON store. It provides simple methods to retrieve, modify, and clear JSON data.
-
-**Methods:**
-- `getAll(): array`:<br>Returns the entire data store.
-- `getKeys(): array`:<br>Returns all keys in the store.
-- `get(string $key)`:<br>Retrieves the value for a specific key.
-- `set(string $key, mixed $value): void`:<br>Sets or updates a key with a value.
-- `delete(string $key): void`:<br>Deletes a key from the store.
-- `clear(): void`:<br>Clears the entire store.
-
-```php
-use JanOelze\Utils\JS;
-
-$js = new JS('/path/to/store.json');
-
-// Set a value
-$js->set('name', 'John Doe');
-
-// Get a value
-echo $js->get('name');
-
-// Get all keys
-print_r($js->getKeys());
-
-// Get all data
-print_r($js->getAll());
-
-// Delete a key
-$js->delete('name');
-
-// Clear the store
-$js->clear();
 ```
