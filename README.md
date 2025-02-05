@@ -927,7 +927,7 @@ $gr->save('./static/sparkline.svg');
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/l1l6lIU.png" />
+  <img width="130" src="https://i.imgur.com/62mxt8c.png" />
   <br>
 </p>
 
