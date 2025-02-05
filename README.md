@@ -922,3 +922,47 @@ $gr->plot([
 $gr->save('./static/sparkline.svg');
 ```
 ![](static/sparkline.svg)
+
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/l1l6lIU.png" />
+  <br>
+</p>
+
+## JS Class
+
+`JS` is a thread-safe (finger's crossed) JSON store. It provides simple methods to retrieve, modify, and clear JSON data.
+
+**Methods:**
+- `getAll(): array`:<br>Returns the entire data store.
+- `getKeys(): array`:<br>Returns all keys in the store.
+- `get(string $key)`:<br>Retrieves the value for a specific key.
+- `set(string $key, mixed $value): void`:<br>Sets or updates a key with a value.
+- `delete(string $key): void`:<br>Deletes a key from the store.
+- `clear(): void`:<br>Clears the entire store.
+
+```php
+use JanOelze\Utils\JS;
+
+$js = new JS('/path/to/store.json');
+
+// Set a value
+$js->set('name', 'John Doe');
+
+// Get a value
+echo $js->get('name');
+
+// Get all keys
+print_r($js->getKeys());
+
+// Get all data
+print_r($js->getAll());
+
+// Delete a key
+$js->delete('name');
+
+// Clear the store
+$js->clear();
+```
