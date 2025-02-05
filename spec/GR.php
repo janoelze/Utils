@@ -72,7 +72,7 @@ $gr->plot([
 ]);
 
 // Output the line chart SVG.
-// echo $gr->output();
+$gr->save('./static/line-chart.svg');
 
 // --- Example 2: Bar Chart ---
 // To see a bar chart, comment out the above line chart block and uncomment this block:
@@ -132,8 +132,4 @@ $gr->plot([
 // Output the bar chart SVG.
 echo $gr->output();
 
-// Optionally, you can save the chart to a file instead of or in addition to outputting it:
-$gr->save('/tmp/chart.svg');
-
-// Open in Chrome:
-exec('open -a "Google Chrome" /tmp/chart.svg');
+$gr->save('./static/bar-chart.svg');

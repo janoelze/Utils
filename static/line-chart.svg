@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+<text x="400" y="22.5" text-anchor="middle" font-size="20">Line Chart Example</text>
+<line x1="5" y1="45" x2="5" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="163" y1="45" x2="163" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="321" y1="45" x2="321" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="479" y1="45" x2="479" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="637" y1="45" x2="637" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="795" y1="45" x2="795" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="395" x2="795" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="325" x2="795" y2="325" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="255" x2="795" y2="255" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="185" x2="795" y2="185" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="115" x2="795" y2="115" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="45" x2="795" y2="45" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="395" x2="795" y2="395" stroke="black" stroke-width="1"/>
+<line x1="5" y1="45" x2="5" y2="395" stroke="black" stroke-width="1"/>
+<path d="M 5 245 C 14.875 240, 182.75 142.5, 202.5 145 C 222.25 147.5, 380.25 297.5, 400 295 C 419.75 292.5, 577.75 100, 597.5 95 C 617.25 90, 785.125 190, 795 195 " fill="none" stroke="red" stroke-width="2"/>
+<path d="M 5 345 C 14.875 342.5, 182.75 310, 202.5 295 C 222.25 280, 380.25 40, 400 45 C 419.75 50, 577.75 390, 597.5 395 C 617.25 400, 785.125 157.5, 795 145 " fill="none" stroke="green" stroke-width="3"/>
+</svg>

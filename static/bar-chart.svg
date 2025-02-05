@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+<text x="400" y="22.5" text-anchor="middle" font-size="20">Bar Chart Example</text>
+<line x1="5" y1="45" x2="5" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="163" y1="45" x2="163" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="321" y1="45" x2="321" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="479" y1="45" x2="479" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="637" y1="45" x2="637" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="795" y1="45" x2="795" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="395" x2="795" y2="395" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="325" x2="795" y2="325" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="255" x2="795" y2="255" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="185" x2="795" y2="185" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="115" x2="795" y2="115" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="45" x2="795" y2="45" stroke="#f0f0f0" stroke-width="1"/>
+<line x1="5" y1="395" x2="795" y2="395" stroke="black" stroke-width="1"/>
+<line x1="5" y1="45" x2="5" y2="395" stroke="black" stroke-width="1"/>
+<rect x="5" y="245" width="75" height="150" fill="orange" stroke="none" />
+<rect x="163" y="145" width="75" height="250" fill="orange" stroke="none" />
+<rect x="321" y="295" width="75" height="100" fill="orange" stroke="none" />
+<rect x="479" y="95" width="75" height="300" fill="orange" stroke="none" />
+<rect x="637" y="195" width="75" height="200" fill="orange" stroke="none" />
+<rect x="84" y="345" width="75" height="50" fill="purple" stroke="none" />
+<rect x="242" y="295" width="75" height="100" fill="purple" stroke="none" />
+<rect x="400" y="45" width="75" height="350" fill="purple" stroke="none" />
+<rect x="558" y="395" width="75" height="0" fill="purple" stroke="none" />
+<rect x="716" y="145" width="75" height="250" fill="purple" stroke="none" />
+</svg>

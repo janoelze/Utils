@@ -955,6 +955,8 @@ $gr->plot([
 echo $gr->output();
 ```
 
+![Line Chart](static/line-chart.svg)
+
 ### Bar Chart
 
 ```php
@@ -1019,3 +1021,5 @@ $gr->plot([
 // Output the generated SVG.
 $gr->save('./chart.svg');
 ```
+
+![Bar Chart](static/bar-chart.svg)
