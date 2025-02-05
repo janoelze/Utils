@@ -906,6 +906,7 @@ for ($i = 0; $i < 100; $i++) {
 // Create a simple sparkline chart
 $gr->plot([
   'type' => 'line',
+  'animate' => 1000, // Animate the line drawing (in ms, optional)
   'style' => [
     'container' => [
       'width' => 300,

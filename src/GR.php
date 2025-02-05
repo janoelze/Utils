@@ -103,6 +103,8 @@ class LineChart extends ChartType
     if (isset($this->config['smoothing'])) {
       $smoothing = floatval($this->config['smoothing']);
     }
+    // New: Convert animate value (ms) to seconds.
+    $animateDuration = isset($this->config['animate']) ? floatval($this->config['animate']) / 1000 : 0;
 
     // Process each dataset.
     foreach ($this->config['datasets'] as $dataset) {
@@ -134,13 +136,25 @@ class LineChart extends ChartType
       // Render with smoothing if requested.
       if ($smoothing > 0) {
         $pathData = $this->getSmoothedPath($points, $smoothing);
-        $svg .= '<path d="' . $pathData . '" fill="none" stroke="' . $datasetStroke . '" stroke-width="' . $datasetStrokeWidth . '"/>' . "\n";
+        if ($animateDuration > 0) {
+          $svg .= '<path d="' . $pathData . '" fill="none" stroke="' . $datasetStroke . '" stroke-width="' . $datasetStrokeWidth . '" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="1000">' . "\n";
+          $svg .= '<animate attributeName="stroke-dashoffset" from="1000" to="0" dur="' . $animateDuration . 's" fill="freeze"/>' . "\n";
+          $svg .= '</path>' . "\n";
+        } else {
+          $svg .= '<path d="' . $pathData . '" fill="none" stroke="' . $datasetStroke . '" stroke-width="' . $datasetStrokeWidth . '"/>' . "\n";
+        }
       } else {
         $pts = [];
         foreach ($points as $pt) {
           $pts[] = $pt['x'] . ',' . $pt['y'];
         }
-        $svg .= '<polyline points="' . implode(' ', $pts) . '" fill="none" stroke="' . $datasetStroke . '" stroke-width="' . $datasetStrokeWidth . '"/>' . "\n";
+        if ($animateDuration > 0) {
+          $svg .= '<polyline points="' . implode(' ', $pts) . '" fill="none" stroke="' . $datasetStroke . '" stroke-width="' . $datasetStrokeWidth . '" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="1000">' . "\n";
+          $svg .= '<animate attributeName="stroke-dashoffset" from="1000" to="0" dur="' . $animateDuration . 's" fill="freeze"/>' . "\n";
+          $svg .= '</polyline>' . "\n";
+        } else {
+          $svg .= '<polyline points="' . implode(' ', $pts) . '" fill="none" stroke="' . $datasetStroke . '" stroke-width="' . $datasetStrokeWidth . '"/>' . "\n";
+        }
       }
     }
     return $svg;
@@ -186,6 +200,9 @@ class BarChart extends ChartType
     // Allow some spacing between bars in the same category.
     $barSpacing = 4;
 
+    // New: Convert animate value (ms) to seconds.
+    $animateDuration = isset($this->config['animate']) ? floatval($this->config['animate']) / 1000 : 0;
+
     // Process each dataset. For grouped bar charts, we show bars side-by-side per category.
     $numDatasets = count($this->config['datasets']);
     foreach ($this->config['datasets'] as $dIndex => $dataset) {
@@ -221,7 +238,14 @@ class BarChart extends ChartType
         $x = $this->dimensions['paddingLeft'] + ($cIndex * $categoryWidth) + $groupOffset;
         // Y position: start at bottom of plot area minus bar height.
         $y = $this->dimensions['height'] - $this->dimensions['paddingBottom'] - $barHeight;
-        $svg .= '<rect x="' . $x . '" y="' . $y . '" width="' . $barWidth . '" height="' . $barHeight . '" fill="' . $barColor . '" stroke="none" />' . "\n";
+        if ($animateDuration > 0) {
+          $svg .= '<rect x="' . $x . '" y="' . ($this->dimensions['height'] - $this->dimensions['paddingBottom']) . '" width="' . $barWidth . '" height="0" fill="' . $barColor . '" stroke="none">' . "\n";
+          $svg .= '<animate attributeName="height" from="0" to="' . $barHeight . '" dur="' . $animateDuration . 's" fill="freeze"/>' . "\n";
+          $svg .= '<animate attributeName="y" from="' . ($this->dimensions['height'] - $this->dimensions['paddingBottom']) . '" to="' . $y . '" dur="' . $animateDuration . 's" fill="freeze"/>' . "\n";
+          $svg .= '</rect>' . "\n";
+        } else {
+          $svg .= '<rect x="' . $x . '" y="' . $y . '" width="' . $barWidth . '" height="' . $barHeight . '" fill="' . $barColor . '" stroke="none" />' . "\n";
+        }
       }
     }
     return $svg;

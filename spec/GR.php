@@ -15,6 +15,7 @@ for ($i = 0; $i < 100; $i++) {
 // Create a simple sparkline chart
 $gr->plot([
   'type'      => 'line',
+  'animate'   => 1000, // Animate the line drawing (in milliseconds)
   'style'     => [
     'container' => [
       'width'         => 300,
@@ -30,6 +31,7 @@ $gr->plot([
 
 // Save the generated SVG to a file
 $gr->save('./static/sparkline.svg');
+exec('open -a "Google Chrome" ./static/sparkline.svg');
 
 // $gr->plot([
 //   // 'title'     => 'Sales Report 2023',
@@ -73,7 +75,7 @@ $gr->save('./static/sparkline.svg');
 // $gr->save('./static/line-chart.svg');
 
 // Open in chrome
-exec('open -a "Google Chrome" ./static/line-chart.svg');
+
 
 // $padding = 5;
 
