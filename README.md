@@ -921,6 +921,9 @@ $gr->plot([
 // Save the generated SVG to a file
 $gr->save('./static/sparkline.svg');
 ```
+
+### Resulting SVG
+
 ![](static/sparkline.svg)
 
 <hr>
