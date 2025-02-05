@@ -693,12 +693,12 @@ $info = $fs->info('/tmp/hello.txt');
 //     [atime] => 1738757881
 //     [mtime] => 1738758051
 //     [ctime] => 1738758051
-//     [creation_time] => 
+//     [creation_time] =>
 //     [permissions] => 33188
 //     [owner] => janoelze
 //     [group] => wheel
 //     [readable] => 1
-//     [writable] => 1 
+//     [writable] => 1
 //     [mime_type] => text/plain
 //     [hash_sha256] => 315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3
 // )
@@ -866,4 +866,147 @@ foreach (range(1, 5) as $i) {
 // Wait for all tasks to finish and collect the results.
 $results = $pool->wait();
 // => [2, 4, 6, 8, 10]
+```
+
+## GR Class
+
+`GR` creates SVG charts.
+
+### Methods
+
+- `plot(array $config)`: Builds the SVG chart based on the provided configuration.
+- `output()`: Returns the generated SVG as a string.
+- `save(string $filePath)`: Saves the SVG output to the specified file.
+
+### Line Chart
+
+```php
+use JanOelze\Utils\GR;
+
+$gr = new GR();
+
+$gr->plot([
+  'title'     => 'Sales Report 2023',
+  'type'      => 'line',         // Change to 'bar' for a bar chart.
+  'smoothing' => 0.1,            // Smoothing factor for line curves.
+  'style'     => [
+    'container' => [
+      'width'         => 1000,
+      'height'        => 600,
+      'padding-top'   => 50,
+      'padding-right' => 50,
+      'padding-bottom'=> 50,
+      'padding-left'  => 50,
+    ],
+    'axis' => [
+      'stroke'       => 'gray',
+      'stroke-width' => 2,
+    ],
+    'x-grid' => [
+      'stroke'       => '#e0e0e0',
+      'stroke-width' => 1,
+    ],
+    'y-grid' => [
+      'stroke'       => '#e0e0e0',
+      'stroke-width' => 1,
+    ],
+    'line' => [
+      'stroke'       => 'blue',
+      'stroke-width' => 3,
+    ],
+  ],
+  'datasets' => [
+    [
+      'title'  => 'Product A',
+      'color'  => 'red',
+      'values' => [
+        [0, 10],
+        [1, 15],
+        [2, 20],
+        [3, 25],
+      ],
+    ],
+    [
+      'title'  => 'Product B',
+      'style'  => [
+        'stroke'       => 'green',
+        'stroke-width' => 2,
+      ],
+      'values' => [
+        [0, 8],
+        [1, 12],
+        [2, 18],
+        [3, 22],
+      ],
+    ],
+  ],
+]);
+
+// Output the generated SVG.
+echo $gr->output();
+```
+
+## Bar Chart
+
+```php
+use JanOelze\Utils\GR;
+
+$gr = new GR();
+
+$gr->plot([
+  'title'     => 'Sales Report 2023',
+  'type'      => 'bar',
+  'style'     => [
+    'container' => [
+      'width'         => 1000,
+      'height'        => 600,
+      'padding-top'   => 50,
+      'padding-right' => 50,
+      'padding-bottom'=> 50,
+      'padding-left'  => 50,
+    ],
+    'axis' => [
+      'stroke'       => 'gray',
+      'stroke-width' => 2,
+    ],
+    'x-grid' => [
+      'stroke'       => '#e0e0e0',
+      'stroke-width' => 1,
+    ],
+    'y-grid' => [
+      'stroke'       => '#e0e0e0',
+      'stroke-width' => 1,
+    ],
+    'bar' => [
+      'fill'         => 'blue',
+    ],
+  ],
+  'datasets' => [
+    [
+      'title'  => 'Product A',
+      'color'  => 'red',
+      'values' => [
+        [0, 10],
+        [1, 15],
+        [2, 20],
+        [3, 25],
+      ],
+    ],
+    [
+      'title'  => 'Product B',
+      'style'  => [
+        'fill'         => 'green',
+      ],
+      'values' => [
+        [0, 8],
+        [1, 12],
+        [2, 18],
+        [3, 22],
+      ],
+    ],
+  ],
+]);
+
+// Output the generated SVG.
+$gr->save('./chart.svg');
 ```

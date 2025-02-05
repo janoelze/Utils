@@ -277,7 +277,7 @@ $data = $rt->run();
       userSpan.textContent = message;
       userDiv.appendChild(userSpan);
       chatBox.appendChild(userDiv);
-
+      
       const tempBotDiv = document.createElement('div');
       tempBotDiv.classList.add('message', 'bot');
       const tempBotSpan = document.createElement('span');
