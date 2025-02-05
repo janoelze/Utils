@@ -22,6 +22,7 @@ A PHP library for quick and dirty, single-file web development.
 - [**S3**](#s3-class): Interact with Amazon S3
 - [**CON**](#con-class): Interact with remote servers
 - [**THR**](#thr-class): Execute tasks in parallel
+- [**GR**](#gr-class): Generate SVG charts
 
 ## Installation
 
