@@ -892,8 +892,6 @@ $results = $pool->wait();
 ```php
 use JanOelze\Utils\GR;
 
-use JanOelze\Utils\GR;
-
 // Initialize the GR library
 $gr = new GR();
 
