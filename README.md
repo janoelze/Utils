@@ -868,6 +868,14 @@ $results = $pool->wait();
 // => [2, 4, 6, 8, 10]
 ```
 
+<hr>
+
+<p align="left">
+  <br>
+  <img width="130" src="https://i.imgur.com/l1l6lIU.png" />
+  <br>
+</p>
+
 ## GR Class
 
 `GR` creates SVG charts.
