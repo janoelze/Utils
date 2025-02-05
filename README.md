@@ -15,6 +15,8 @@ A PHP library for quick and dirty, single-file web development.
 - [**JBS**](#jbs-class): Job scheduler to run tasks at specific intervals
 - [**AI**](#ai-class): LLM interface and prompt builder
 - [**CH**](#ch-class): File-based cache handler
+- [**GR**](#gr-class): Generate SVG charts
+- [**JS**](#js-class): Simple JSON store
 - [**LG**](#lg-class): Logger with colored output and file logging
 - [**VLD**](#vld-class): Validation library with built-in and custom rules
 - [**ENV**](#env-class): Get/Set environment variables
@@ -22,7 +24,6 @@ A PHP library for quick and dirty, single-file web development.
 - [**S3**](#s3-class): Interact with Amazon S3
 - [**CON**](#con-class): Interact with remote servers
 - [**THR**](#thr-class): Execute tasks in parallel
-- [**GR**](#gr-class): Generate SVG charts
 
 ## Installation
 
