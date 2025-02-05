@@ -874,9 +874,9 @@ $results = $pool->wait();
 
 ### Methods
 
-- `plot(array $config)`: Builds the SVG chart based on the provided configuration.
-- `output()`: Returns the generated SVG as a string.
-- `save(string $filePath)`: Saves the SVG output to the specified file.
+- `plot(array $config)`:<br>Builds the SVG chart based on the provided configuration.
+- `output()`: Returns the<br>generated SVG as a string.
+- `save(string $filePath)`:<br>Saves the SVG output to the specified file.
 
 ### Line Chart
 
