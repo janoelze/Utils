@@ -955,4 +955,6 @@ $gr->plot([
 echo $gr->output();
 ```
 
-Bar charts are WIP
+![Line Chart](static/line-chart.svg)
+
+Bar charts are WIP.
