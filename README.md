@@ -125,8 +125,9 @@ $data = $rt->run();
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/o2rOr1z.png" />
+  <img width="130" src="static/RT.png" />
   <br>
+  ![RT Class](static/RT.png)
 </p>
 
 ### RT Class
