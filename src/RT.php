@@ -36,12 +36,39 @@ class RT
     $this->pages[strtoupper($method)][$page] = $handler;
   }
 
-  public function getUrl(string $page, array $params = []): string
+  public function getUrl(string $page = '', array $params = []): string
   {
-    $baseUrl = $this->config['base_url'] ?? null;
-    if ($baseUrl) {
+    // If no page is supplied, return the current URL with merged query parameters.
+    if ($page === '') {
+      // If base_url is configured, use it.
+      if (!empty($this->config['base_url'])) {
+        $baseUrl = rtrim($this->config['base_url'], '/');
+        $currentQuery = $_SERVER['QUERY_STRING'] ?? '';
+        parse_str($currentQuery, $existingParams);
+        $mergedParams = array_merge($existingParams, $params);
+        if (!empty($mergedParams)) {
+          return "$baseUrl/?" . http_build_query($mergedParams);
+        }
+        return "$baseUrl/";
+      } else {
+        // Build current URL from server variables.
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $script = $_SERVER['SCRIPT_NAME'] ?? '';
+        $currentQuery = $_SERVER['QUERY_STRING'] ?? '';
+        parse_str($currentQuery, $existingParams);
+        $mergedParams = array_merge($existingParams, $params);
+        if (!empty($mergedParams)) {
+          return "{$scheme}://{$host}{$script}?" . http_build_query($mergedParams);
+        }
+        return "{$scheme}://{$host}{$script}";
+      }
+    }
+
+    // If a page is supplied, build URL using the page parameter from config.
+    if (!empty($this->config['base_url'])) {
       $query = http_build_query(array_merge([$this->config['page_param'] => $page], $params));
-      return rtrim($baseUrl, '/') . "/?{$query}";
+      return rtrim($this->config['base_url'], '/') . "/?{$query}";
     } else {
       $scheme = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http';
       $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
