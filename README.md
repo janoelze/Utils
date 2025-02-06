@@ -125,13 +125,9 @@ $data = $rt->run();
 
 <p align="left">
   <br>
-  <img width="130" src="./static/RT.png" />
-  <img width="130" src="static/RT.png" />
-  <img width="130" src="/static/RT.png" />
+  <img width="130" src="./static/RT.png" />>
   <br>
 </p>
-
-![](static/RT.png)
 
 ### RT Class
 
@@ -177,7 +173,7 @@ echo $data['title'];
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/vBwMYVd.png" />
+  <img width="130" src="./static/SQ.png" />>
   <br>
 </p>
 
@@ -266,7 +262,7 @@ try {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/KZhvvcy.png" />
+  <img width="130" src="./static/JBS.png" />>
   <br>
 </p>
 
@@ -310,7 +306,7 @@ $jbs->runJob('fetch-news');
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/9pdP8Kl.png" />
+  <img width="130" src="./static/AI.png" />>
   <br>
 </p>
 
@@ -403,7 +399,7 @@ if (!isset($res['error'])) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/q8js5rm.png" />
+  <img width="130" src="./static/CH.png" />>
   <br>
 </p>
 
@@ -453,7 +449,7 @@ echo $ch->get('key2')['a'];
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/l1l6lIU.png" />
+  <img width="130" src="./static/GR.png" />
   <br>
 </p>
 
@@ -510,7 +506,7 @@ $gr->save('./static/sparkline.svg');
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/62mxt8c.png" />
+  <img width="130" src="./static/JS.png" />
   <br>
 </p>
 
@@ -554,7 +550,7 @@ $js->clear();
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/gLu1DRe.png" />
+  <img width="130" src="./static/LG.png" />
   <br>
 </p>
 
@@ -611,7 +607,7 @@ $lg->error('An error occurred:', $error);
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/qmgRCZi.png" />
+  <img width="130" src="./static/VLD.png" />
   <br>
 </p>
 
@@ -665,7 +661,7 @@ if ($vld->isValid('licensePlate', 'ABC-1234')) {
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/8kSj05L.png" />
+  <img width="130" src="./static/ENV.png" />
   <br>
 </p>
 
@@ -700,7 +696,7 @@ $env->set('DEBUG', true);
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/QdYWIb5.png" />
+  <img width="130" src="./static/FS.png" />
   <br>
 </p>
 
@@ -815,7 +811,7 @@ $info = $fs->info('/tmp/hello.txt');
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/8hUJKmS.png" />
+  <img width="130" src="./static/S3.png" />
   <br>
 </p>
 
@@ -879,7 +875,7 @@ echo $s3->getUrl('logs/diagnostics.log');
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/heGiGIX.png" />
+  <img width="130" src="./static/CON.png" />
   <br>
 </p>
 
@@ -938,7 +934,7 @@ $con->close();
 
 <p align="left">
   <br>
-  <img width="130" src="https://i.imgur.com/1fpaW7k.png" />
+  <img width="130" src="./static/THR.png" />
   <br>
 </p>
 
