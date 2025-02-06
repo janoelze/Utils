@@ -125,7 +125,7 @@ $data = $rt->run();
 
 <p align="left">
   <br>
-  <img width="130" src="./static/RT.png" />>
+  <img width="130" src="./static/RT.png" />
   <br>
 </p>
 
@@ -173,7 +173,7 @@ echo $data['title'];
 
 <p align="left">
   <br>
-  <img width="130" src="./static/SQ.png" />>
+  <img width="130" src="./static/SQ.png" />
   <br>
 </p>
 
@@ -262,7 +262,7 @@ try {
 
 <p align="left">
   <br>
-  <img width="130" src="./static/JBS.png" />>
+  <img width="130" src="./static/JBS.png" />
   <br>
 </p>
 
@@ -306,7 +306,7 @@ $jbs->runJob('fetch-news');
 
 <p align="left">
   <br>
-  <img width="130" src="./static/AI.png" />>
+  <img width="130" src="./static/AI.png" />
   <br>
 </p>
 
@@ -399,7 +399,7 @@ if (!isset($res['error'])) {
 
 <p align="left">
   <br>
-  <img width="130" src="./static/CH.png" />>
+  <img width="130" src="./static/CH.png" />
   <br>
 </p>
 
