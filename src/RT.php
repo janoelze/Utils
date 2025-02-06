@@ -69,7 +69,7 @@ class RT
       }
       $middleware = $middlewares[$middlewareIndex];
       $middlewareIndex++;
-      return $middleware($req, $res, $runMiddlewares);
+      return $middleware($req, $runMiddlewares);
     };
 
     $runMiddlewares($request);
